@@ -1,0 +1,210 @@
+"use server";
+
+import { createClient } from "@/lib/supabase/server";
+import { generateQRCodeBuffer } from "@/lib/qr-code";
+import { sendEmailWithQRCode } from "@/lib/email";
+import type { FormEntry } from "@/types/form-entries";
+
+export type EmailSendResult = {
+  success: boolean;
+  sent: number;
+  failed: number;
+  errors: Array<{ email: string; error: string }>;
+};
+
+/**
+ * Send emails with QR codes to participants
+ * @param participantIds - Array of participant IDs to send emails to
+ * @param emailSubject - Custom email subject (optional)
+ * @param emailBody - Custom email body (optional)
+ */
+export async function sendQREmails(
+  participantIds: number[],
+  emailSubject?: string,
+  emailBody?: string
+): Promise<EmailSendResult> {
+  const supabase = await createClient();
+
+  // Fetch participants (don't filter by status here - the UI already filtered)
+  const { data: participants, error: fetchError } = await supabase
+    .from("kickstart_form_entries")
+    .select("*")
+    .in("id", participantIds);
+
+  if (fetchError) {
+    throw new Error(`Failed to fetch participants: ${fetchError.message}`);
+  }
+
+  if (!participants || participants.length === 0) {
+    return {
+      success: false,
+      sent: 0,
+      failed: 0,
+      errors: [{ email: "N/A", error: "No accepted participants found" }],
+    };
+  }
+
+  const results: EmailSendResult = {
+    success: false, // Will be set to true if at least one email is sent
+    sent: 0,
+    failed: 0,
+    errors: [],
+  };
+
+  // Process each participant
+  for (const participant of participants) {
+    if (!participant.email) {
+      results.failed++;
+      results.errors.push({
+        email: participant.email || "No email",
+        error: "Participant has no email address",
+      });
+      continue;
+    }
+
+    if (!participant.event_uid) {
+      results.failed++;
+      results.errors.push({
+        email: participant.email,
+        error: "Participant has no event UID",
+      });
+      continue;
+    }
+
+    try {
+      // Generate QR code
+      const qrCodeBuffer = await generateQRCodeBuffer(participant.event_uid);
+
+      // Send email directly (no API route needed)
+      console.log(`📧 Sending email to ${participant.email}`);
+      
+      const emailResult = await sendEmailWithQRCode({
+        to: participant.email,
+        subject: emailSubject || getDefaultSubject(participant),
+        html: emailBody || getDefaultEmailBody(participant),
+        qrCode: qrCodeBuffer.toString("base64"),
+        qrCodeFilename: `qr-code-${participant.event_uid}.png`,
+      });
+
+      if (emailResult.success) {
+        console.log(`✅ Email sent to ${participant.email}:`, {
+          messageId: emailResult.messageId || "N/A",
+          emailId: emailResult.emailId || "N/A",
+          method: emailResult.method || "SMTP",
+        });
+        results.sent++;
+        results.success = true; // At least one email was sent successfully
+      } else {
+        const errorMsg = emailResult.error || "Email sending failed";
+        console.error(`❌ Email not sent to ${participant.email}:`, errorMsg);
+        throw new Error(errorMsg);
+      }
+    } catch (error) {
+      results.failed++;
+      results.errors.push({
+        email: participant.email,
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    }
+  }
+
+  // Final success status: true if at least one email was sent
+  if (results.sent > 0) {
+    results.success = true;
+  }
+
+  console.log("📊 Final email send results:", {
+    total: participants.length,
+    sent: results.sent,
+    failed: results.failed,
+    success: results.success,
+  });
+
+  return results;
+}
+
+function getDefaultSubject(participant: FormEntry): string {
+  return `Your KickSTART Luzon 2026 Check-in QR Code - ${participant.event_uid}`;
+}
+
+function getDefaultEmailBody(participant: FormEntry): string {
+  const fullName = `${participant.first_name} ${participant.middle_name ? participant.middle_name + " " : ""}${participant.last_name}${participant.suffix ? " " + participant.suffix : ""}`;
+  const eventDate = participant.preferred_date || "January 24, 2026";
+  const seatInfo = participant.seat_assignment || "To be assigned";
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KickSTART Luzon 2026 - Your QR Code</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #0f9dfe 0%, #0d8ae8 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+    <h1 style="color: white; margin: 0; font-size: 28px;">KickSTART Luzon 2026</h1>
+    <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">START-DOST General Assembly</p>
+  </div>
+  
+  <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 10px 10px;">
+    <h2 style="color: #0f9dfe; margin-top: 0;">Hello ${participant.first_name}!</h2>
+    
+    <p>Thank you for registering for <strong>KickSTART Luzon 2026: START-DOST General Assembly</strong>.</p>
+    
+    <p>Your registration has been <strong style="color: #10b981;">accepted</strong>! Please find your check-in QR code attached to this email.</p>
+    
+    <div style="background: #f9fafb; border-left: 4px solid #0f9dfe; padding: 20px; margin: 25px 0; border-radius: 5px;">
+      <h3 style="color: #0f9dfe; margin-top: 0;">Your Event Details</h3>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 8px 0; color: #666; width: 140px;"><strong>Name:</strong></td>
+          <td style="padding: 8px 0; color: #333;">${fullName}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #666;"><strong>Event UID:</strong></td>
+          <td style="padding: 8px 0; color: #333; font-family: monospace;">${participant.event_uid}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #666;"><strong>Date:</strong></td>
+          <td style="padding: 8px 0; color: #333;">${eventDate}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #666;"><strong>Seat Assignment:</strong></td>
+          <td style="padding: 8px 0; color: #333;">${seatInfo}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; color: #666;"><strong>Location:</strong></td>
+          <td style="padding: 8px 0; color: #333;">Batangas State University - Main Campus</td>
+        </tr>
+      </table>
+    </div>
+    
+    <div style="background: #fff9e6; border: 1px solid #fcea3f; padding: 20px; margin: 25px 0; border-radius: 5px;">
+      <h3 style="color: #856404; margin-top: 0;">📱 Important Instructions</h3>
+      <ul style="color: #856404; padding-left: 20px;">
+        <li>Your QR code is attached to this email</li>
+        <li>Save the QR code image to your phone or print it out</li>
+        <li>Present your QR code at the check-in counter on the event day</li>
+        <li>Make sure your QR code is clearly visible and not damaged</li>
+      </ul>
+    </div>
+    
+    <p style="margin-top: 30px;">We look forward to seeing you at the event!</p>
+    
+    <p style="margin-top: 20px;">
+      Best regards,<br>
+      <strong>KickSTART Luzon 2026 Organizing Committee</strong>
+    </p>
+    
+    <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">
+    
+    <p style="font-size: 12px; color: #666; text-align: center;">
+      This is an automated email. Please do not reply to this message.<br>
+      If you have any questions, please contact the event organizers.
+    </p>
+  </div>
+</body>
+</html>
+  `.trim();
+}
+
