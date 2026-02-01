@@ -489,28 +489,6 @@ export function AddRegistrantSheet({
               <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
-                  name="preferred_date"
-                  render={({ field }) => (
-                     <FormItem>
-                       <FormLabel className="font-semibold text-slate-700 dark:text-slate-300">Preferred Date *</FormLabel>
-                       <Select onValueChange={field.onChange} value={field.value}>
-                         <FormControl>
-                           <SelectTrigger className="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
-                             <SelectValue placeholder="Select preferred date" />
-                           </SelectTrigger>
-                         </FormControl>
-                         <SelectContent className="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600">
-                           <SelectItem value="December 13" className="text-blue-300 dark:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20">December 13</SelectItem>
-                           <SelectItem value="December 14" className="text-purple-300 dark:text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20">December 14</SelectItem>
-                         </SelectContent>
-                       </Select>
-                       <FormMessage />
-                     </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
                   name="island"
                   render={({ field }) => (
                      <FormItem>
