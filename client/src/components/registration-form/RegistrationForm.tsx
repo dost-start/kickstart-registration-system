@@ -74,7 +74,6 @@ export default function RegistrationForm() {
       hasAttendedGA: false,
       hasDostSa: false,
       dietaryRestrictions: "",
-      preferredDate: undefined,
       island: undefined,
       isStartMember: false,
       whyJoin: "",
@@ -674,31 +673,6 @@ export default function RegistrationForm() {
                       className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-[#0f9dfe]/50 focus:ring-[#0f9dfe]/20"
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Preferred Date */}
-            <FormField
-              control={form.control}
-              name="preferredDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-semibold">
-                    Preferred Date *
-                  </FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger className="bg-white border-gray-300 text-gray-900 focus:border-[#0f9dfe]/50 focus:ring-[#0f9dfe]/20">
-                        <SelectValue placeholder="Select date (December 13 or 14)" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="bg-white border-gray-200">
-                      <SelectItem value="December 13" className="text-gray-900 hover:bg-[#0f9dfe]/10">December 13</SelectItem>
-                      <SelectItem value="December 14" className="text-gray-900 hover:bg-[#0f9dfe]/10">December 14</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

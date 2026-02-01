@@ -1,6 +1,39 @@
 import { Calendar, Clock, MapPin, Trophy, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
+const REGIONAL_EVENTS = [
+  {
+    island: "Luzon",
+    date: "February 28, 2026",
+    day: "Saturday",
+    time: "8:00 AM - 8:00 PM",
+    location: "Batangas State University, The National Engineering University - Alangilan Leonardo da Vinci Amphitheater",
+    locationAlt: "or DOST 4A RO Meeting Room",
+    participants: "150 DOST Scholars (Region 4A)",
+    badgeColor: "bg-[#0f9dfe]/10 text-[#0d8ae8] border-[#0f9dfe]/30 hover:bg-[#0f9dfe]/20",
+  },
+  {
+    island: "Visayas",
+    date: "February 28, 2026",
+    day: "Saturday",
+    time: "8:00 AM - 8:00 PM",
+    location: "Cebu Institute of Technology - University Gymnasium",
+    locationAlt: null,
+    participants: "150 DOST Scholars (Region 7, Central Visayas)",
+    badgeColor: "bg-[#0f9dfe]/10 text-[#0d8ae8] border-[#0f9dfe]/30 hover:bg-[#0f9dfe]/20",
+  },
+  {
+    island: "Mindanao",
+    date: "TBA",
+    day: null,
+    time: "TBA",
+    location: "TBA",
+    locationAlt: null,
+    participants: "TBA",
+    badgeColor: "bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200",
+  },
+];
+
 export default function EventDetails() {
   return (
     <main className="bg-white min-h-[calc(100vh-200px)] flex items-center py-4 md:py-8 px-4 sm:px-6 lg:px-8">
@@ -24,58 +57,66 @@ export default function EventDetails() {
             </div>
           </div>
           
-          {/* Content Section */}
+          {/* Regional Events Section */}
           <div className="relative p-8">
-            <div className="relative">
-              <div className="grid md:grid-cols-3 gap-6">
-                {/* Date & Time */}
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-[#0f9dfe]/10 rounded-xl flex items-center justify-center border border-[#0f9dfe]/30">
-                      <Calendar className="w-6 h-6 text-[#0f9dfe]" />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">Date & Time</h3>
-                    <p className="text-sm text-gray-700 font-medium">January 24, 2026</p>
-                    <p className="text-sm text-gray-600">
-                      8:00 AM - 8:00 PM
-                    </p>
-                  </div>
-                </div>
-
-                {/* Location */}
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-[#0f9dfe]/10 rounded-xl flex items-center justify-center border border-[#0f9dfe]/30">
-                      <MapPin className="w-6 h-6 text-[#0f9dfe]" />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">Location</h3>
-                    <p className="text-sm text-gray-700 font-medium">
-                      Batangas State University
-                    </p>
-                    <p className="text-sm text-gray-600">Leonardo da Vinci Amphitheater, Alangilan</p>
-                    <p className="text-xs text-gray-500 italic">or DOST CALABARZON Regional Office</p>
-                  </div>
-                </div>
-
-                {/* Eligibility */}
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-[#0f9dfe]/10 rounded-xl flex items-center justify-center border border-[#0f9dfe]/30">
-                      <Users className="w-6 h-6 text-[#0f9dfe]" />
-                    </div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 text-lg">Participants</h3>
-                    <Badge className="mt-1 bg-[#0f9dfe]/10 text-[#0d8ae8] border border-[#0f9dfe]/30 hover:bg-[#0f9dfe]/20">
-                      150 DOST Scholars (Region IV-A, Luzon)
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Regional Events</h2>
+            <div className="space-y-6">
+              {REGIONAL_EVENTS.map((event) => (
+                <div
+                  key={event.island}
+                  className="rounded-xl border border-gray-200 p-6 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    <Badge
+                      variant="outline"
+                      className={`font-semibold border ${event.badgeColor}`}
+                    >
+                      KickSTART {event.island} 2026
                     </Badge>
                   </div>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
+                          <Calendar className="w-5 h-5 text-[#0f9dfe]" />
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">Date & Time</h3>
+                        <p className="text-sm text-gray-700 font-medium">{event.date}{event.day ? ` (${event.day})` : ""}</p>
+                        <p className="text-sm text-gray-600">{event.time}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
+                          <MapPin className="w-5 h-5 text-[#0f9dfe]" />
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">Location</h3>
+                        <p className="text-sm text-gray-700 font-medium">{event.location}</p>
+                        {event.locationAlt && (
+                          <p className="text-xs text-gray-500 italic">{event.locationAlt}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
+                          <Users className="w-5 h-5 text-[#0f9dfe]" />
+                        </div>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">Participants</h3>
+                        <Badge className={`mt-1 border ${event.badgeColor}`}>
+                          {event.participants}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

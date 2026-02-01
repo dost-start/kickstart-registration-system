@@ -69,7 +69,6 @@ export function AddRegistrantSheet({
       has_attended_ga: false,
       has_dost_sa: false,
       dietary_restrictions: "",
-      preferred_date: undefined,
       seat_assignment: "",
       event_uid: "",
       island: undefined,
@@ -136,7 +135,7 @@ export function AddRegistrantSheet({
         has_attended_ga: data.has_attended_ga || false,
         has_dost_sa: data.has_dost_sa || false,
         dietary_restrictions: data.dietary_restrictions || null,
-        preferred_date: data.preferred_date || null,
+        preferred_date: null,
         seat_assignment: data.seat_assignment?.trim() ? data.seat_assignment.trim() : null,
         event_uid: data.event_uid?.trim()
           ? data.event_uid.trim().toLowerCase()
@@ -184,7 +183,6 @@ export function AddRegistrantSheet({
         has_attended_ga: false,
         has_dost_sa: false,
         dietary_restrictions: "",
-        preferred_date: undefined,
         seat_assignment: "",
         event_uid: "",
         island: undefined,

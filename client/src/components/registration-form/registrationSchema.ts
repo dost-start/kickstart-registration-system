@@ -50,9 +50,6 @@ export const registrationSchema = z.object({
   hasAttendedGA: z.boolean(),
   hasDostSa: z.boolean().optional(),
   dietaryRestrictions: z.string().optional().or(z.literal("")),
-  preferredDate: z.enum(["December 13", "December 14"], {
-    message: "Please select a preferred date",
-  }),
 
   // Prioritization / limits
   island: z.enum(ISLAND_OPTIONS, { message: "Please select an island" }).optional(),

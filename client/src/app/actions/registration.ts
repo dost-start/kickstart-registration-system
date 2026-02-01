@@ -225,7 +225,6 @@ export async function submitRegistration(data: RegistrationFormData) {
     let eventUidResult: { uid: string; seatLabel: string } | null = null;
     try {
       eventUidResult = await getUniqueEventUid(supabase, {
-        preferredDate: validatedData.preferredDate,
         familyName: validatedData.lastName,
       });
     } catch (uidError) {
@@ -269,7 +268,7 @@ export async function submitRegistration(data: RegistrationFormData) {
       has_attended_ga: validatedData.hasAttendedGA,
       has_dost_sa: validatedData.hasDostSa ?? false,
       dietary_restrictions: dietaryRestrictions || null,
-      preferred_date: validatedData.preferredDate,
+      preferred_date: null,
       event_uid: eventUidResult.uid,
       seat_assignment: `Seat ${eventUidResult.seatLabel}`,
       island: validatedData.island ?? null,

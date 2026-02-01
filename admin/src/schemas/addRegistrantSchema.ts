@@ -26,7 +26,6 @@ export const addRegistrantSchema = z.object({
   has_attended_ga: z.boolean(),
   has_dost_sa: z.boolean(),
   dietary_restrictions: z.string().optional(),
-  preferred_date: z.string().min(1, "Preferred date is required"),
   seat_assignment: z.string().optional(),
   event_uid: z.string().optional(),
   island: z.enum(ISLAND_OPTIONS, {
