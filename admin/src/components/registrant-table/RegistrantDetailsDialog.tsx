@@ -127,7 +127,6 @@ function EventPassSection({ registrant, onUpdate }: EventPassSectionProps) {
     try {
       for (let attempt = 0; attempt < 8; attempt++) {
         const candidate = generateEventUid({
-          preferredDate: registrant.preferred_date || undefined,
           familyName: registrant.last_name || registrant.first_name || undefined,
         });
 
@@ -430,7 +429,6 @@ export function RegistrantDetailsDialog({
       has_attended_ga: registrant.has_attended_ga || false,
       has_dost_sa: registrant.has_dost_sa || false,
       dietary_restrictions: registrant.dietary_restrictions || "",
-      preferred_date: registrant.preferred_date || "",
       island: registrant.island || undefined,
       is_start_member: registrant.is_start_member || false,
       why_join: registrant.why_join || "",
@@ -487,7 +485,6 @@ export function RegistrantDetailsDialog({
         has_attended_ga: data.has_attended_ga || false,
         has_dost_sa: data.has_dost_sa || false,
         dietary_restrictions: data.dietary_restrictions || null,
-        preferred_date: data.preferred_date || null,
         island: data.island || null,
         is_start_member: data.is_start_member || false,
         why_join: data.why_join?.trim() ? data.why_join.trim() : null,
@@ -788,35 +785,6 @@ export function RegistrantDetailsDialog({
                 </h3>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="preferred_date"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Preferred Date *</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select preferred date" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="December 13">
-                              December 13
-                            </SelectItem>
-                            <SelectItem value="December 14">
-                              December 14
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
                   <FormField
                     control={form.control}
                     name="island"
