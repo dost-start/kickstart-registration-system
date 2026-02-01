@@ -79,6 +79,7 @@ export async function verifyRegistration(encodedEmail: string) {
         email: registrationData.email,
         status: registrationData.status,
         createdAt: registrationData.created_at,
+        island: registrationData.island ?? null,
       },
     };
   } catch (error) {
