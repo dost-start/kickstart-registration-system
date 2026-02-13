@@ -36,6 +36,7 @@ const searchableColumns = [
   { key: "first_name", label: "Name" },
   { key: "email", label: "Email" },
   { key: "contact_number", label: "Contact Number" },
+  { key: "spas_id", label: "SPAS ID" },
   { key: "university", label: "University" },
   { key: "course", label: "Course" },
   { key: "scholarship_type", label: "Scholarship Type" },

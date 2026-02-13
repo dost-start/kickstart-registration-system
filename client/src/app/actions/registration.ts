@@ -251,6 +251,7 @@ export async function submitRegistration(data: RegistrationFormData) {
     }
 
     const formEntry: TablesInsert<"kickstart_form_entries"> = {
+      spas_id: validatedData.spasId.trim(),
       first_name: validatedData.firstName,
       middle_name: validatedData.middleName ?? null,
       last_name: validatedData.lastName,

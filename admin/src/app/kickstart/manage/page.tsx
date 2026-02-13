@@ -225,7 +225,7 @@ export default function EventManagement() {
                 <h2 className="text-2xl font-bold text-[#0f9dfe]">
                   KickSTART 2026
                 </h2>
-                <p className="text-gray-600 mt-1">&quot;From Scholars to Innovators: Advancing Together and Shaping the Future&quot;</p>
+                <p className="text-gray-600 mt-1">&quot;Empowering Scholars, Building Innovation, and Leading Change&quot;</p>
               </div>
               <RegistrationStatusBadge key={statusKey} />
             </div>

@@ -59,6 +59,7 @@ export function AddRegistrantSheet({
       suffix: "",
       email: "",
       contact_number: "",
+      spas_id: "",
       university: undefined,
       university_other: "",
       course: "",
@@ -125,6 +126,7 @@ export function AddRegistrantSheet({
         suffix: data.suffix || null,
         email: data.email || null,
         contact_number: data.contact_number,
+        spas_id: data.spas_id.trim(),
         university: data.university === OTHER_UNIVERSITY_LABEL ? (data.university_other || "") : (data.university || ""),
         university_custom: data.university === OTHER_UNIVERSITY_LABEL ? (data.university_other || null) : null,
         course: data.course,
@@ -173,6 +175,7 @@ export function AddRegistrantSheet({
         suffix: "",
         email: "",
         contact_number: "",
+        spas_id: "",
         university: undefined,
         university_other: "",
         course: "",
@@ -344,6 +347,25 @@ export function AddRegistrantSheet({
                      <FormControl>
                        <Input 
                          {...field} 
+                         disabled={isLoading}
+                         className="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                       />
+                     </FormControl>
+                     <FormMessage />
+                   </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="spas_id"
+                render={({ field }) => (
+                   <FormItem>
+                     <FormLabel className="font-semibold text-slate-700 dark:text-slate-300">SPAS ID *</FormLabel>
+                     <FormControl>
+                       <Input 
+                         {...field} 
+                         placeholder="DOST-SEI SPAS ID"
                          disabled={isLoading}
                          className="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
                        />

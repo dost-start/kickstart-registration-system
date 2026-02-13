@@ -22,6 +22,8 @@ export const registrationSchema = z.object({
     )
     .min(1, "Contact number is required"),
 
+  spasId: z.string().min(1, "SPAS ID is required"),
+
   // Name fields
   firstName: z.string().min(1, "First name is required"),
   middleName: z.string().optional(),

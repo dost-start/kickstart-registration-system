@@ -41,6 +41,7 @@ export type Database = {
     Tables: {
       kickstart_form_entries: {
         Row: {
+          spas_id: string | null
           contact_number: string
           course: string
           created_at: string
@@ -68,6 +69,7 @@ export type Database = {
           why_join: string | null
         }
         Insert: {
+          spas_id?: string | null
           contact_number: string
           course: string
           created_at?: string
@@ -95,6 +97,7 @@ export type Database = {
           why_join?: string | null
         }
         Update: {
+          spas_id?: string | null
           contact_number?: string
           course?: string
           created_at?: string

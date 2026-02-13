@@ -62,6 +62,7 @@ export default function RegistrationForm() {
     defaultValues: {
       email: "",
       contactNumber: "",
+      spasId: "",
       firstName: "",
       middleName: "",
       lastName: "",
@@ -362,6 +363,28 @@ export default function RegistrationForm() {
                     <Input 
                       type="tel" 
                       placeholder="Contact number" 
+                      {...field}
+                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-[#0f9dfe]/50 focus:ring-[#0f9dfe]/20"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* SPAS ID */}
+            <FormField
+              control={form.control}
+              name="spasId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700 font-semibold">
+                    SPAS ID *
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="e.g. U-2022-4A-00000"
                       {...field}
                       className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-[#0f9dfe]/50 focus:ring-[#0f9dfe]/20"
                     />

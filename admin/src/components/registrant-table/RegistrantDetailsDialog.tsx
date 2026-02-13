@@ -417,6 +417,7 @@ export function RegistrantDetailsDialog({
       suffix: registrant.suffix || "",
       email: registrant.email || "",
       contact_number: registrant.contact_number || "",
+      spas_id: registrant.spas_id || "",
       university: isOtherUniversity
         ? OTHER_UNIVERSITY_LABEL
         : (registrant.university as (typeof UNIVERSITY_OPTIONS)[number]),
@@ -469,6 +470,7 @@ export function RegistrantDetailsDialog({
         suffix: data.suffix || null,
         email: data.email || null,
         contact_number: data.contact_number,
+        spas_id: data.spas_id?.trim() || null,
         university:
           data.university === OTHER_UNIVERSITY_LABEL
             ? (data.university_other || "")
@@ -641,6 +643,20 @@ export function RegistrantDetailsDialog({
                       <FormLabel>Contact Number *</FormLabel>
                       <FormControl>
                         <Input {...field} disabled={isLoading} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="spas_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>SPAS ID *</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="DOST-SEI SPAS ID" disabled={isLoading} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -1046,6 +1062,14 @@ export function RegistrantDetailsDialog({
                   </label>
                   <p className="text-sm">
                     {registrant.contact_number || "Not provided"}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    SPAS ID
+                  </label>
+                  <p className="text-sm font-mono">
+                    {registrant.spas_id || "—"}
                   </p>
                 </div>
               </div>

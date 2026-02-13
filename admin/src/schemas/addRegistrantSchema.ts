@@ -9,6 +9,7 @@ export const addRegistrantSchema = z.object({
   suffix: z.string().optional(),
   email: z.string().min(1, "Email is required").email("Invalid email format"),
   contact_number: z.string().min(1, "Contact number is required"),
+  spas_id: z.string().min(1, "SPAS ID is required"),
   university: z.union([
     z.enum(UNIVERSITY_OPTIONS),
     z.literal(OTHER_UNIVERSITY_LABEL),
