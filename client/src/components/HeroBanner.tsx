@@ -29,14 +29,11 @@ export default function HeroBanner() {
               <div className="bg-gradient-to-r from-white via-[#0f9dfe] to-[#fcea3f] bg-clip-text text-transparent">
                 KickSTART 2026
               </div>
-              <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-white/90 mt-2">
-                START-DOST General Assembly
-              </div>
             </h1>
             
             {/* Theme */}
             <p className="text-1xl md:text-2xl lg:text-1xl text-[#fcea3f] font-light italic mb-8 max-w-5xl mx-auto leading-relaxed">
-              &quot;From Scholars to Innovators: Advancing Together and Shaping the Future&quot;
+              &quot;Empowering Scholars, Building Innovation, and Leading Change&quot;
             </p>
             
             {/* CTA Buttons */}
@@ -55,8 +52,8 @@ export default function HeroBanner() {
                 asChild
                 className="px-12 py-6 text-xl font-bold border-2 border-white text-white hover:bg-transparent hover:text-white shadow-2xl transform hover:scale-105 transition-all duration-300 rounded-full backdrop-blur-sm bg-transparent"
               >
-                <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">
-                  Learn More
+                <a href="/primer.pdf" target="_blank" rel="noopener noreferrer">
+                  View Event Primer
                 </a>
               </Button>
             </div>

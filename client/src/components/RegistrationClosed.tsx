@@ -40,7 +40,7 @@ export default function RegistrationClosed() {
             Registration Closed
           </h2>
           <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Thank you for your interest in KickSTART 2026: START-DOST General Assembly.
+            Thank you for your interest in KickSTART 2026.
             Registration for this event has been closed.
           </p>
         </div>
@@ -52,7 +52,7 @@ export default function RegistrationClosed() {
           
           <div className="relative text-center">
             <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white via-red-200 to-pink-300 bg-clip-text text-transparent">
-              KickSTART 2026: START-DOST General Assembly
+              KickSTART 2026
             </h3>
             <p className="text-lg text-white/60 mb-8">
               Registration Period Has Ended
@@ -67,7 +67,7 @@ export default function RegistrationClosed() {
                       Registration Status
                     </h4>
                     <p className="text-white/90 mb-3">
-                      Registration for KickSTART 2026: START-DOST General Assembly is
+                      Registration for KickSTART 2026 is
                       now closed. We are no longer accepting new applications for
                       this event.
                     </p>

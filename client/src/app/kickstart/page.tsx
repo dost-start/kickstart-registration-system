@@ -12,19 +12,19 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata: Metadata = {
-  title: "KickSTART 2026: START-DOST General Assembly",
-  description: "KickSTART 2026 is the official regional leg of the START-DOST General Assembly. It aims to unite DOST scholars, strengthen collaboration, and empower youth leaders in technology and innovation for nation-building.",
-  keywords: "kickstart, DOST, scholars, assembly, START, technology, innovation, nation-building, Philippines, Region IV-A",
+  title: "KickSTART 2026",
+  description: "KickSTART 2026 is the official General Assembly of START-DOST, uniting DOST-SEI scholars across Luzon, Visayas, and Mindanao. A nationwide convergence of innovation, collaboration, and leadership for nation-building.",
+  keywords: "kickstart, DOST, scholars, assembly, START, technology, innovation, nation-building, Philippines, Luzon, Visayas, Mindanao",
   openGraph: {
-    title: "KickSTART 2026: START-DOST General Assembly",
-    description: "KickSTART 2026 is the official regional leg of the START-DOST General Assembly. It aims to unite DOST scholars, strengthen collaboration, and empower youth leaders in technology and innovation for nation-building.",
+    title: "KickSTART 2026",
+    description: "KickSTART 2026 is the official General Assembly of START-DOST, uniting DOST-SEI scholars across Luzon, Visayas, and Mindanao for innovation and nation-building.",
     type: "website",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "KickSTART 2026: START-DOST General Assembly",
+        alt: "KickSTART 2026",
       },
     ],
   },

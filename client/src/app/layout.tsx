@@ -21,9 +21,9 @@ const monument = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "KickSTART 2026: START-DOST General Assembly",
+  title: "KickSTART 2026",
   description:
-    "KickSTART 2026 is the official regional leg of the START-DOST General Assembly. It aims to unite DOST scholars, strengthen collaboration, and empower youth leaders in technology and innovation for nation-building.",
+    "KickSTART 2026 is the official General Assembly uniting DOST-SEI scholars across Luzon, Visayas, and Mindanao for innovation, collaboration, and nation-building.",
   keywords: [
     "kickstart",
     "luzon",
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "START - DOST Scholars" }],
   openGraph: {
-    title: "KickSTART 2026: START-DOST General Assembly",
+    title: "KickSTART 2026",
     description:
-      "KickSTART 2026 is the official regional leg of the START-DOST General Assembly. It aims to unite DOST scholars, strengthen collaboration, and empower youth leaders in technology and innovation for nation-building.",
+      "KickSTART 2026 is the official General Assembly uniting DOST-SEI scholars across Luzon, Visayas, and Mindanao for innovation and nation-building.",
     type: "website",
     locale: "en_US",
     images: [
@@ -51,15 +51,15 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "KickSTART 2026: START-DOST General Assembly",
+        alt: "KickSTART 2026",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "KickSTART 2026: START-DOST General Assembly",
+    title: "KickSTART 2026",
     description:
-      "KickSTART 2026 is the official regional leg of the START-DOST General Assembly. It aims to unite DOST scholars, strengthen collaboration, and empower youth leaders in technology and innovation for nation-building.",
+      "KickSTART 2026 is the official General Assembly uniting DOST-SEI scholars across Luzon, Visayas, and Mindanao for innovation and nation-building.",
     images: ["/og-image.png"],
   },
   robots: {

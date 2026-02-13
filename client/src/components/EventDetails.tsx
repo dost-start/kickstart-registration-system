@@ -6,31 +6,31 @@ const REGIONAL_EVENTS = [
     island: "Luzon",
     date: "February 28, 2026",
     day: "Saturday",
-    time: "8:00 AM - 8:00 PM",
-    location: "Batangas State University, The National Engineering University - Alangilan Leonardo da Vinci Amphitheater",
-    locationAlt: "or DOST 4A RO Meeting Room",
-    participants: "150 DOST Scholars (Region 4A)",
+    time: "8:00 AM - 6:00 PM",
+    location: "Batangas State University - The National Engineering University - Alangilan Campus",
+    locationAlt: null,
+    participants: "DOST Scholars (Luzon)",
     badgeColor: "bg-[#0f9dfe]/10 text-[#0d8ae8] border-[#0f9dfe]/30 hover:bg-[#0f9dfe]/20",
   },
   {
     island: "Visayas",
     date: "February 28, 2026",
     day: "Saturday",
-    time: "8:00 AM - 8:00 PM",
-    location: "Cebu Institute of Technology - University Gymnasium",
+    time: "8:00 AM - 6:00 PM",
+    location: "University of Southern Philippines Foundation",
     locationAlt: null,
-    participants: "150 DOST Scholars (Region 7, Central Visayas)",
+    participants: "DOST Scholars (Visayas)",
     badgeColor: "bg-[#0f9dfe]/10 text-[#0d8ae8] border-[#0f9dfe]/30 hover:bg-[#0f9dfe]/20",
   },
   {
     island: "Mindanao",
-    date: "TBA",
-    day: null,
-    time: "TBA",
-    location: "TBA",
+    date: "March 14, 2026",
+    day: "Saturday",
+    time: "8:00 AM - 6:00 PM",
+    location: "University of Mindanao - Main Campus",
     locationAlt: null,
-    participants: "TBA",
-    badgeColor: "bg-gray-100 text-gray-600 border-gray-200 hover:bg-gray-200",
+    participants: "DOST Scholars (Mindanao)",
+    badgeColor: "bg-[#0f9dfe]/10 text-[#0d8ae8] border-[#0f9dfe]/30 hover:bg-[#0f9dfe]/20",
   },
 ];
 
@@ -47,11 +47,8 @@ export default function EventDetails() {
                 <h1 className="text-4xl font-bold text-[#0f9dfe] mb-2">
                   KickSTART 2026
                 </h1>
-                <p className="text-gray-700 text-lg font-medium">
-                  START-DOST General Assembly
-                </p>
                 <p className="text-gray-600 text-sm mt-1">
-                  &quot;From Scholars to Innovators: Advancing Together and Shaping the Future&quot;
+                  &quot;Empowering Scholars, Building Innovation, and Leading Change&quot;
                 </p>
               </div>
             </div>
@@ -134,11 +131,11 @@ export default function EventDetails() {
             </div>
             
             <p className="text-gray-700 leading-relaxed mb-6 text-lg">
-              KickSTART 2026 is the official regional leg of the START-DOST General Assembly. 
-              It aims to unite DOST scholars, strengthen collaboration, and empower youth leaders in 
-              technology and innovation for nation-building. The event focuses on combining technical 
-              skill development, leadership, and patriotism to address real-world challenges faced by 
-              scholars and communities.
+              KickSTART is the official General Assembly of START-DOST, uniting scholars and officers 
+              from across the Philippines in a nationwide convergence of innovation, collaboration, 
+              and leadership. The program begins with an Online National Launch, followed by regional 
+              face-to-face assemblies in Batangas (Luzon), Cebu (Visayas), and Davao (Mindanao) to 
+              ensure inclusivity for scholars from all islands.
             </p>
             
             <div className="grid md:grid-cols-4 gap-6">
@@ -152,7 +149,7 @@ export default function EventDetails() {
                 <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
                   <Trophy className="w-5 h-5 text-[#0f9dfe]" />
                 </div>
-                <span className="text-gray-700 font-medium">KickSTART Hack</span>
+                <span className="text-gray-700 font-medium">KickSTART Ideathon</span>
               </div>
               <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
                 <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
@@ -164,7 +161,7 @@ export default function EventDetails() {
                 <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
                   <Trophy className="w-5 h-5 text-[#0f9dfe]" />
                 </div>
-                <span className="text-gray-700 font-medium">Patriotech Sessions</span>
+                <span className="text-gray-700 font-medium">Patriotech & Pitching</span>
               </div>
             </div>
           </div>

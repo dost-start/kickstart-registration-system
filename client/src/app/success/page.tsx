@@ -11,15 +11,15 @@ import Footer from "@/components/Footer";
 const ISLAND_EVENT_DATES: Record<string, string> = {
   Luzon: "February 28, 2026",
   Visayas: "February 28, 2026",
-  Mindanao: "TBA",
+  Mindanao: "March 14, 2026",
 };
 
 export const metadata: Metadata = {
-  title: "Registration Successful - KickSTART 2026: START-DOST General Assembly",
+  title: "Registration Successful - KickSTART 2026",
   description:
     "Your registration for KickSTART 2026 has been successfully completed. We will contact you soon via email.",
   openGraph: {
-    title: "Registration Successful - KickSTART 2026: START-DOST General Assembly",
+    title: "Registration Successful - KickSTART 2026",
     description:
       "Your registration for KickSTART 2026 has been successfully completed. We will contact you soon via email.",
     type: "website",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         url: "https://res.cloudinary.com/dsz9ok0yq/image/upload/v1751719220/SUMMIT_cbyrru.png",
         width: 1200,
         height: 630,
-        alt: "KickSTART 2026: START-DOST General Assembly",
+        alt: "KickSTART 2026",
       },
     ],
   },

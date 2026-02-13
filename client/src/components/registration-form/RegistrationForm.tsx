@@ -220,7 +220,7 @@ export default function RegistrationForm() {
             Registration Form
           </h2>
           <p className="text-center text-gray-600 mb-8">
-            KickSTART 2026 • START-DOST General Assembly
+            KickSTART 2026
           </p>
 
           {submitMessage && (
