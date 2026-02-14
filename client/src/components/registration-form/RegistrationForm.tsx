@@ -210,9 +210,9 @@ export default function RegistrationForm() {
   return (
     <section
       id="registration-form"
-      className="bg-white py-16 px-4"
+      className="bg-white py-8 sm:py-12 md:py-16 px-4 sm:px-6"
     >
-      <div className="max-w-2xl mx-auto relative bg-white rounded-2xl p-8 shadow-lg border border-gray-200 overflow-hidden">
+      <div className="max-w-2xl mx-auto relative bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg border border-gray-200 overflow-hidden">
         <div className="relative">
           <h2
             id="registration-form-title"

@@ -83,23 +83,30 @@ export default function Footer() {
     }
   };
   return (
-    <footer className="bg-white text-gray-900 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-200">
-      <div className="max-w-4xl mx-auto text-center">
+    <footer className="bg-gradient-to-b from-gray-50 to-white text-gray-900 py-12 sm:py-16 px-4 sm:px-6 lg:px-8 border-t border-gray-200">
+      <div className="max-w-4xl mx-auto">
         {/* Registration Status Check Section */}
-        <div className="mb-8 relative bg-white rounded-2xl p-8 shadow-lg border border-gray-200 overflow-hidden">
+        <div
+          id="status-check"
+          className="mb-10 sm:mb-12 relative rounded-2xl p-5 sm:p-6 md:p-8 shadow-lg overflow-hidden border border-gray-200/80 bg-white"
+        >
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0f9dfe] to-[#0d8ae8]" />
           <div className="relative">
-            <h3 className="text-xl font-bold mb-6 text-[#0f9dfe]">
+            <h3 className="text-lg sm:text-xl font-bold mb-4 sm:mb-6 text-[#0f9dfe] text-center">
               Check Your Registration Status
             </h3>
+            <p className="text-sm text-gray-500 mb-4 sm:mb-5 text-center">
+              Enter your email to see your registration status
+            </p>
 
-            <div className="max-w-md mx-auto space-y-4" id="status-check">
-              <div className="flex gap-3">
+            <div className="max-w-md mx-auto space-y-4">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Input
                   type="email"
                   placeholder="Enter your email address"
                   value={checkEmail}
                   onChange={(e) => setCheckEmail(e.target.value)}
-                  className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:bg-white focus:border-[#0f9dfe] focus:ring-[#0f9dfe]/20"
+                  className="h-11 sm:h-12 bg-gray-50/80 border-gray-300 text-gray-900 placeholder:text-gray-500 focus:bg-white focus:border-[#0f9dfe] focus:ring-[#0f9dfe]/20 rounded-xl"
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
                       handleStatusCheck();
@@ -109,7 +116,7 @@ export default function Footer() {
                 <Button
                   onClick={handleStatusCheck}
                   disabled={isChecking}
-                  className="px-6 bg-[#0f9dfe] hover:bg-[#0d8ae8] text-white shadow-lg hover:shadow-[#0f9dfe]/25 transform hover:scale-105 transition-all duration-300 rounded-full"
+                  className="h-11 sm:h-12 px-6 sm:px-8 bg-[#0f9dfe] hover:bg-[#0d8ae8] text-white font-semibold shadow-lg hover:shadow-[#0f9dfe]/30 transition-all duration-300 rounded-xl shrink-0"
                 >
                   {isChecking ? "Checking..." : "Check"}
                 </Button>
@@ -117,15 +124,15 @@ export default function Footer() {
 
               {checkResult && (
                 <div
-                  className={`p-4 rounded-xl border backdrop-blur-sm ${
+                  className={`p-4 sm:p-5 rounded-xl border ${
                     checkResult.success
-                      ? "bg-green-500/20 border-green-400/30"
-                      : "bg-red-500/20 border-red-400/30"
+                      ? "bg-green-50/90 border-green-200"
+                      : "bg-red-50/90 border-red-200"
                   }`}
                 >
                   {checkResult.success && checkResult.registrationData ? (
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-center gap-2">
+                    <div className="space-y-2 text-left sm:text-center">
+                      <div className="flex items-center justify-center sm:justify-center gap-2">
                         {getStatusIcon(checkResult.registrationData.status)}
                         <span className="font-semibold text-gray-900">Registration Found</span>
                       </div>
@@ -156,57 +163,63 @@ export default function Footer() {
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold mb-8 text-[#0f9dfe]">
+        {/* Contact Section */}
+        <h3 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-[#0f9dfe] text-center">
           For More Information, Contact Us
         </h3>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {/* LinkedIn */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10 sm:mb-12">
           <a
             href="https://linkedin.com/company/startdost"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 p-4 rounded-2xl bg-white hover:bg-gray-50 transition-all duration-300 group border border-gray-200 hover:border-[#0f9dfe]/50 hover:shadow-[#0f9dfe]/25"
+            className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 p-4 sm:p-5 rounded-xl bg-white hover:bg-gray-50 transition-all duration-300 group border border-gray-200 hover:border-[#0f9dfe]/40 hover:shadow-md active:scale-[0.98]"
           >
-            <Linkedin className="w-6 h-6 text-teal-400 group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-semibold text-gray-700">LinkedIn</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#0a66c2]/10 flex items-center justify-center group-hover:bg-[#0a66c2]/20 transition-colors">
+              <Linkedin className="w-5 h-5 sm:w-6 sm:h-6 text-[#0a66c2]" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold text-gray-700">LinkedIn</span>
           </a>
 
-          {/* Email */}
           <a
             href="mailto:dost.start@gmail.com"
-            className="flex items-center justify-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/20 transition-all duration-300 group backdrop-blur-sm border border-white/20 hover:border-orange-400/50 hover:shadow-orange-500/25"
+            className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 p-4 sm:p-5 rounded-xl bg-white hover:bg-gray-50 transition-all duration-300 group border border-gray-200 hover:border-orange-400/50 hover:shadow-md active:scale-[0.98]"
           >
-            <Mail className="w-6 h-6 text-orange-400 group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-semibold text-gray-700">Email</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500/20 transition-colors">
+              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-orange-500" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold text-gray-700">Email</span>
           </a>
 
-          {/* Facebook */}
           <a
             href="https://facebook.com/STARTDOST"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/20 transition-all duration-300 group backdrop-blur-sm border border-white/20 hover:border-blue-400/50 hover:shadow-blue-500/25"
+            className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 p-4 sm:p-5 rounded-xl bg-white hover:bg-gray-50 transition-all duration-300 group border border-gray-200 hover:border-blue-500/50 hover:shadow-md active:scale-[0.98]"
           >
-            <Facebook className="w-6 h-6 text-blue-400 group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-semibold text-gray-700">Facebook</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+              <Facebook className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold text-gray-700">Facebook</span>
           </a>
 
-          {/* Instagram */}
           <a
             href="https://instagram.com/start_dost"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 p-4 rounded-2xl bg-white/10 hover:bg-white/20 transition-all duration-300 group backdrop-blur-sm border border-white/20 hover:border-pink-400/50 hover:shadow-pink-500/25"
+            className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 p-4 sm:p-5 rounded-xl bg-white hover:bg-gray-50 transition-all duration-300 group border border-gray-200 hover:border-pink-500/50 hover:shadow-md active:scale-[0.98]"
           >
-            <Instagram className="w-6 h-6 text-pink-400 group-hover:scale-110 transition-transform" />
-            <span className="text-sm font-semibold text-gray-700">Instagram</span>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-pink-500/10 flex items-center justify-center group-hover:bg-pink-500/20 transition-colors">
+              <Instagram className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500" />
+            </div>
+            <span className="text-xs sm:text-sm font-semibold text-gray-700">Instagram</span>
           </a>
         </div>
 
-        <div className="border-t border-gray-200 pt-6">
-          <p className="text-sm text-gray-600">
-            © 2025 DOST START. All rights reserved.
+        {/* Copyright */}
+        <div className="border-t border-gray-200 pt-6 sm:pt-8">
+          <p className="text-xs sm:text-sm text-gray-500 text-center">
+            © 2026 DOST START. All rights reserved.
           </p>
         </div>
       </div>

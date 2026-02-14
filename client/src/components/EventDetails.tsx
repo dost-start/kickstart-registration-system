@@ -6,7 +6,7 @@ const REGIONAL_EVENTS = [
     island: "Luzon",
     date: "February 28, 2026",
     day: "Saturday",
-    time: "8:00 AM - 6:00 PM",
+    time: "12:00 PM - 5:00 PM",
     location: "Batangas State University - The National Engineering University - Alangilan Campus",
     locationAlt: null,
     participants: "DOST Scholars (Luzon)",
@@ -16,7 +16,7 @@ const REGIONAL_EVENTS = [
     island: "Visayas",
     date: "February 28, 2026",
     day: "Saturday",
-    time: "8:00 AM - 6:00 PM",
+    time: "12:00 PM - 5:00 PM",
     location: "University of Southern Philippines Foundation",
     locationAlt: null,
     participants: "DOST Scholars (Visayas)",
@@ -26,7 +26,7 @@ const REGIONAL_EVENTS = [
     island: "Mindanao",
     date: "March 14, 2026",
     day: "Saturday",
-    time: "8:00 AM - 6:00 PM",
+    time: "12:00 PM - 5:00 PM",
     location: "University of Mindanao - Main Campus",
     locationAlt: null,
     participants: "DOST Scholars (Mindanao)",
@@ -41,10 +41,10 @@ export default function EventDetails() {
         {/* Event Info Card */}
         <div className="relative bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
           {/* Image Section */}
-          <div className="relative h-48 bg-gradient-to-r from-[#0f9dfe]/10 via-[#0f9dfe]/15 to-[#0f9dfe]/10 overflow-hidden">
+          <div className="relative h-40 sm:h-48 bg-gradient-to-r from-[#0f9dfe]/10 via-[#0f9dfe]/15 to-[#0f9dfe]/10 overflow-hidden">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <h1 className="text-4xl font-bold text-[#0f9dfe] mb-2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0f9dfe] mb-2">
                   KickSTART 2026
                 </h1>
                 <p className="text-gray-600 text-sm mt-1">
@@ -55,13 +55,13 @@ export default function EventDetails() {
           </div>
           
           {/* Regional Events Section */}
-          <div className="relative p-8">
+          <div className="relative p-4 sm:p-6 lg:p-8">
             <h2 className="text-xl font-bold text-gray-900 mb-6">Regional Events</h2>
             <div className="space-y-6">
               {REGIONAL_EVENTS.map((event) => (
                 <div
                   key={event.island}
-                  className="rounded-xl border border-gray-200 p-6 bg-gray-50/50 hover:bg-gray-50 transition-colors"
+                  className="rounded-xl border border-gray-200 p-4 sm:p-6 bg-gray-50/50 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex flex-wrap items-center gap-2 mb-4">
                     <Badge
@@ -71,7 +71,7 @@ export default function EventDetails() {
                       KickSTART {event.island} 2026
                     </Badge>
                   </div>
-                  <div className="grid md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                     <div className="flex items-start space-x-3">
                       <div className="flex-shrink-0">
                         <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
@@ -119,7 +119,7 @@ export default function EventDetails() {
         </div>
 
         {/* Event Description Card */}
-        <div className="relative bg-white rounded-2xl p-8 shadow-lg border border-gray-200 overflow-hidden">
+        <div className="relative bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-200 overflow-hidden">
           <div className="relative">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-12 h-12 bg-[#0f9dfe]/10 rounded-xl flex items-center justify-center border border-[#0f9dfe]/30">
@@ -138,7 +138,7 @@ export default function EventDetails() {
               ensure inclusivity for scholars from all islands.
             </p>
             
-            <div className="grid md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
                 <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
                   <Clock className="w-5 h-5 text-[#0f9dfe]" />
@@ -156,12 +156,6 @@ export default function EventDetails() {
                   <Users className="w-5 h-5 text-[#0f9dfe]" />
                 </div>
                 <span className="text-gray-700 font-medium">Networking & Fireside Chat</span>
-              </div>
-              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">
-                  <Trophy className="w-5 h-5 text-[#0f9dfe]" />
-                </div>
-                <span className="text-gray-700 font-medium">Patriotech & Pitching</span>
               </div>
             </div>
           </div>

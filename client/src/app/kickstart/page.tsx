@@ -35,7 +35,7 @@ export default async function Home() {
   const isRegistrationClosed = await getEventRegistrationStatus();
 
   return (
-    <div className="relative">
+    <div className="relative min-h-screen overflow-x-hidden w-full">
       {/* Navbar */}
       <Navbar />
       {/* Hero Section */}

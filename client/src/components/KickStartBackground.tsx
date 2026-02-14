@@ -4,7 +4,7 @@ export default function KickStartBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Electric blue base */}
-      <div className="absolute inset-0 bg-[#225aff]" />
+      <div className="absolute inset-0 pt-30 bg-[#225aff]" />
 
       {/* Grid pattern - subtle white/lighter lines */}
       <div
@@ -30,15 +30,15 @@ export default function KickStartBackground() {
         }}
       />
 
-      {/* Solid white stars scattered */}
+      {/* Solid white stars scattered - kept below navbar (~top 22%) */}
       {[
-        { top: "8%", left: "5%", size: 12 },
-        { top: "15%", right: "12%", size: 8 },
+        { top: "26%", left: "5%", size: 12 },
+        { top: "33%", right: "12%", size: 8 },
         { top: "85%", left: "8%", size: 14 },
         { top: "90%", left: "25%", size: 6 },
         { top: "88%", right: "15%", size: 10 },
         { top: "92%", right: "35%", size: 8 },
-        { top: "12%", right: "30%", size: 6 },
+        { top: "30%", right: "30%", size: 6 },
       ].map((s, i) => (
         <div
           key={`star-w-${i}`}
@@ -57,7 +57,7 @@ export default function KickStartBackground() {
 
       {/* Dark blue solid stars */}
       {[
-        { top: "20%", left: "15%", size: 10 },
+        { top: "38%", left: "15%", size: 10 },
         { top: "75%", left: "12%", size: 8 },
         { top: "80%", right: "25%", size: 12 },
       ].map((s, i) => (
@@ -76,9 +76,9 @@ export default function KickStartBackground() {
         </div>
       ))}
 
-      {/* Outlined star - top left (large) */}
+      {/* Outlined star - top left (large, below navbar) */}
       <div
-        className="absolute top-[5%] left-[3%] w-16 h-16 text-white opacity-60"
+        className="absolute top-[24%] left-[3%] w-16 h-16 text-white opacity-60"
         style={{ transform: "rotate(-15deg)" }}
       >
         <StarOutlined />
@@ -110,7 +110,7 @@ export default function KickStartBackground() {
       {[
         { top: "70%", left: "5%", size: 16 },
         { top: "85%", right: "8%", size: 12 },
-        { top: "10%", left: "25%", size: 10 },
+        { top: "28%", left: "25%", size: 10 },
       ].map((s, i) => (
         <div
           key={`sparkle-${i}`}
