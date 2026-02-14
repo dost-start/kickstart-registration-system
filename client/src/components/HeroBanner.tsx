@@ -1,35 +1,39 @@
 'use client';
-import Particles from "./ui/particles";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import KickStartBackground from "./KickStartBackground";
 
 export default function HeroBanner() {
   return (
-    <div className="relative w-screen h-screen bg-gradient-to-b from-blue-900 via-blue-950 to-black">
-      <div className="absolute inset-0">
-        <Particles
-          particleColors={['#0f9dfe', '#fcea3f']}
-          particleCount={600}
-          particleSpread={10}
-          speed={0.1}
-          particleBaseSize={100}
-          moveParticlesOnHover={true}
-          alphaParticles={false}
-          disableRotation={false}
-        />
-      </div>
-      {/* Dark overlay for better text visibility */}
-      <div className="absolute inset-0 bg-black/40 pointer-events-none"></div>
+    <div className="relative w-screen h-screen">
+      {/* Electric blue background with grid and stars */}
+      <KickStartBackground />
+      {/* Subtle overlay for text contrast */}
+      <div className="absolute inset-0 bg-black/15 pointer-events-none" />
       <div className="absolute inset-0 flex flex-col pointer-events-none">
         {/* Main Content - Centered */}
         <div className="flex-1 flex flex-col items-center justify-center text-center px-8">
           <div className="max-w-6xl mx-auto">
-            {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-none tracking-tight">
-              <div className="bg-gradient-to-r from-white via-[#0f9dfe] to-[#fcea3f] bg-clip-text text-transparent">
+            {/* Secondary text - START GENERAL ASSEMBLY */}
+            <p className="font-sans text-lg md:text-xl font-light tracking-[0.2em] text-white/90 mb-4 [text-shadow:0_0_15px_rgba(147,197,253,0.8)] uppercase">
+              START GENERAL ASSEMBLY
+            </p>
+            {/* Main Title - KickSTART in rounded glowing border */}
+            <div
+              className="inline-block px-10 md:px-14 py-4 md:py-6 rounded-full border-2 border-white/90 mb-4"
+              style={{
+                boxShadow: "0 0 30px rgba(147,197,253,0.8), 0 0 60px rgba(147,197,253,0.5), inset 0 0 20px rgba(255,255,255,0.1)",
+              }}
+            >
+              <h1
+                className="font-monument text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tight text-white"
+                style={{
+                  textShadow: "0 0 20px rgba(147,197,253,0.9), 0 0 40px rgba(147,197,253,0.6), 0 0 60px rgba(147,197,253,0.4)",
+                }}
+              >
                 KickSTART 2026
-              </div>
-            </h1>
+              </h1>
+            </div>
             
             {/* Theme */}
             <p className="text-1xl md:text-2xl lg:text-1xl text-[#fcea3f] font-light italic mb-8 max-w-5xl mx-auto leading-relaxed">
