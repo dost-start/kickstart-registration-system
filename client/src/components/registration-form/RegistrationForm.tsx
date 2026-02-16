@@ -558,10 +558,7 @@ export default function RegistrationForm() {
                       <SelectContent className="bg-white border-gray-200">
                         {ISLAND_OPTIONS.map((island) => {
                           const disabled = isIslandDisabled(island);
-                          const status = islandStatus?.[island];
-                          const displayText = disabled && status
-                            ? `${island} (Full - ${status.currentCount}/150)`
-                            : island;
+                          const displayText = disabled ? `${island} (Full)` : island;
 
                           return (
                             <SelectItem
@@ -581,11 +578,6 @@ export default function RegistrationForm() {
                       </SelectContent>
                     </Select>
                     <FormMessage />
-                    {islandStatus && field.value && islandStatus[field.value] && (
-                      <p className="text-sm text-gray-600 mt-1">
-                        {islandStatus[field.value].currentCount} / 150 participants registered
-                      </p>
-                    )}
                   </FormItem>
                 );
               }}
