@@ -17,8 +17,9 @@ export const SCHOLARSHIP_OPTIONS = [
   "JLSS RA 10612",
 ] as const;
 
-// University Dropdown Options
+// University Dropdown Options (based on CHED list and regional coverage for DOST scholars)
 export const UNIVERSITY_OPTIONS = [
+  // NCR - Manila & Metro Manila
   "Adamson University",
   "Ateneo de Manila University",
   "Centro Escolar University",
@@ -53,7 +54,121 @@ export const UNIVERSITY_OPTIONS = [
   "University of the East – Manila",
   "University of the Philippines – Diliman",
   "University of the Philippines – Manila",
- ] as const;
+  "University of the Philippines",
+  // Calabarzon (Batangas, Cavite, Laguna, Rizal, Quezon)
+  "Batangas State University",
+  "Cavite State University",
+  "Laguna State Polytechnic University",
+  "University of Rizal System",
+  "University of Batangas",
+  "Lyceum of the Philippines University – Batangas",
+  "De La Salle Lipa",
+  "Southern Luzon State University",
+  "Manuel S. Enverga University Foundation",
+  "First Asia Institute of Technology and Humanities",
+  "University of the Philippines Los Baños",
+  // Central Luzon
+  "Central Luzon State University",
+  "Bulacan State University",
+  "Tarlac State University",
+  "Don Honorio Ventura Technological State University",
+  "Nueva Ecija University of Science and Technology",
+  "Bataan Peninsula State University",
+  "Pampanga State University",
+  "Angeles University Foundation",
+  "Holy Angel University",
+  "University of the Assumption",
+  // Bicol Region
+  "Bicol University",
+  "Ateneo de Naga University",
+  "University of Nueva Caceres",
+  "Polytechnic State University of Bicol",
+  "Central Bicol State University of Agriculture",
+  // Ilocos & Cagayan Valley
+  "Mariano Marcos State University",
+  "Pangasinan State University",
+  "Cagayan State University",
+  "Isabela State University",
+  "University of Northern Philippines",
+  "Nueva Vizcaya State University",
+  // Cordillera
+  "University of the Philippines Baguio",
+  "Saint Louis University",
+  "University of the Cordilleras",
+  "Benguet State University",
+  "University of Baguio",
+  // Western Visayas (Iloilo, Bacolod, etc.)
+  "University of the Philippines Visayas",
+  "West Visayas State University",
+  "Central Philippine University",
+  "University of San Agustin",
+  "University of Iloilo",
+  "University of Saint La Salle",
+  "Carlos Hilado Memorial State University",
+  "Capiz State University",
+  "Aklan State University",
+  // Central Visayas (Cebu, Bohol, Dumaguete) - KickSTART Visayas venue
+  "University of Southern Philippines Foundation",
+  "University of San Carlos",
+  "Cebu Technological University",
+  "Cebu Normal University",
+  "Silliman University",
+  "University of Cebu",
+  "Cebu Doctor's University",
+  "University of the Visayas",
+  "Holy Name University",
+  "Bohol Island State University",
+  "Negros Oriental State University",
+  // Eastern Visayas
+  "Eastern Visayas State University",
+  "Leyte Normal University",
+  "University of the Philippines Tacloban",
+  "Visayas State University",
+  "Samar State University",
+  // Zamboanga Peninsula
+  "Western Mindanao State University",
+  "Ateneo de Zamboanga University",
+  "Zamboanga State College of Marine Sciences and Technology",
+  "Jose Rizal Memorial State University",
+  "Universidad de Zamboanga",
+  // Northern Mindanao (Cagayan de Oro, Iligan, etc.)
+  "Xavier University – Ateneo de Cagayan",
+  "Mindanao State University – Iligan Institute of Technology",
+  "Central Mindanao University",
+  "University of Science and Technology of Southern Philippines",
+  "Bukidnon State University",
+  "Liceo de Cagayan University",
+  "Capitol University",
+  // Davao Region - KickSTART Mindanao venue
+  "University of Mindanao",
+  "Ateneo de Davao University",
+  "University of the Philippines Mindanao",
+  "University of Southeastern Philippines",
+  "University of the Immaculate Conception",
+  "San Pedro College",
+  "Davao Doctors College",
+  // Soccsksargen (General Santos, Koronadal, etc.)
+  "Mindanao State University – General Santos",
+  "University of Southern Mindanao",
+  "Notre Dame of Dadiangas University",
+  "Sultan Kudarat State University",
+  "Cotabato Foundation College of Science and Technology",
+  // Caraga
+  "Caraga State University",
+  "Father Saturnino Urios University",
+  "Saint Paul University Surigao",
+  "Surigao del Norte State University",
+  "North Eastern Mindanao State University",
+  // MIMAROPA
+  "Palawan State University",
+  "Western Philippines University",
+  "Mindoro State University",
+  "Romblon State University",
+  "Marinduque State University",
+  // Bangsamoro (BARMM)
+  "Mindanao State University – Main",
+  "Cotabato State University",
+] as const;
 
 export const OTHER_UNIVERSITY_LABEL = "Other (please specify)" as const;
 
