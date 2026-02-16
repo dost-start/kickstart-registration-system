@@ -27,6 +27,8 @@
     "lucide-react": "^0.525.0",
     "next": "^16.1.6",
     "nodemailer": "^7.0.12",
+    "passkit-generator": "^3.5.7",
+    "pngjs": "^7.0.0",
     "qrcode": "^1.5.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
