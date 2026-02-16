@@ -356,6 +356,34 @@ export async function batchUpdateCheckIn(
 }
 
 /**
+ * Batch update registration status for multiple registrants
+ */
+export async function batchUpdateStatus(
+  ids: number[],
+  status: StatusType
+): Promise<void> {
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("kickstart_form_entries")
+    .update({ status })
+    .in("id", ids);
+
+  if (error) {
+    throw new Error(`Failed to batch update status: ${error.message}`);
+  }
+
+  // Check island limits when accepting or setting to pending
+  if (status === "accepted" || status === "pending") {
+    try {
+      await checkAndCloseIslandRegistrations();
+    } catch (err) {
+      console.error("Error checking island registration limits:", err);
+    }
+  }
+}
+
+/**
  * Delete a registrant
  */
 export async function deleteRegistrant(id: number): Promise<void> {

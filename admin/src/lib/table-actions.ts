@@ -3,6 +3,7 @@ import {
   toggleRegistrantCheckIn,
   deleteRegistrant,
   batchUpdateCheckIn,
+  batchUpdateStatus,
 } from "@/lib/data";
 import type { FormEntry, StatusType } from "@/types/form-entries";
 
@@ -53,6 +54,23 @@ export async function handleBatchCheckIn(
     onSuccess();
   } catch (error) {
     console.error("Error batch updating check-in:", error);
+    throw error;
+  }
+}
+
+/**
+ * Handle batch status update
+ */
+export async function handleBatchStatusUpdate(
+  registrantIds: number[],
+  newStatus: StatusType,
+  onSuccess: () => void
+): Promise<void> {
+  try {
+    await batchUpdateStatus(registrantIds, newStatus);
+    onSuccess();
+  } catch (error) {
+    console.error("Error batch updating status:", error);
     throw error;
   }
 }

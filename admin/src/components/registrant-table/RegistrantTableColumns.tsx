@@ -13,6 +13,7 @@ import {
   UserX,
   XCircle,
 } from "lucide-react";
+import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -52,30 +53,65 @@ function ActionCell({
 }) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
+  const isAccepted = registrant.status === "accepted";
+
   return (
     <div className="flex items-center gap-2">
-      {/* Check-in/Check-out Actions */}
-      <Button
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleCheckIn(registrant);
-        }}
-        className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 rounded-full"
-        variant={"outline"}
-        disabled={isUpdating === registrant.id}
-      >
-        {registrant.is_checked_in ? (
-          <>
-            <UserX className="w-4 h-4" />
-            <span className="font-bold">Check Out</span>
-          </>
-        ) : (
-          <>
-            <UserCheck className="w-4 h-4" />
-            <span className="font-bold">Check In</span>
-          </>
-        )}
-      </Button>
+      {/* Check-in button: only when accepted */}
+      {isAccepted && (
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleCheckIn(registrant);
+          }}
+          className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 rounded-full"
+          variant={"outline"}
+          disabled={isUpdating === registrant.id}
+        >
+          {registrant.is_checked_in ? (
+            <>
+              <UserX className="w-4 h-4" />
+              <span className="font-bold">Check Out</span>
+            </>
+          ) : (
+            <>
+              <UserCheck className="w-4 h-4" />
+              <span className="font-bold">Check In</span>
+            </>
+          )}
+        </Button>
+      )}
+
+      {/* Accept/Reject buttons: only when not yet accepted */}
+      {!isAccepted && (
+        <>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              updateRegistrantStatus(registrant.id, "accepted");
+            }}
+            disabled={isUpdating === registrant.id}
+            className="flex items-center gap-2 border-2 border-green-300 text-green-700 hover:bg-green-50 hover:border-green-400 transition-all duration-300 rounded-full"
+            variant="outline"
+          >
+            <CheckCircle className="w-4 h-4" />
+            <span className="font-bold">Accept</span>
+          </Button>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              updateRegistrantStatus(registrant.id, "rejected");
+            }}
+            disabled={isUpdating === registrant.id}
+            className="flex items-center gap-2 border-2 border-red-300 text-red-700 hover:bg-red-50 hover:border-red-400 transition-all duration-300 rounded-full"
+            variant="outline"
+          >
+            <XCircle className="w-4 h-4" />
+            <span className="font-bold">Reject</span>
+          </Button>
+        </>
+      )}
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0 border-2 border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 rounded-full">
@@ -207,6 +243,34 @@ export default function RegistrantTableColumns({
   deleteRegistrant,
 }: Props): ColumnDef<FormEntry>[] {
   return [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) =>
+            table.toggleAllPageRowsSelected(!!value)
+          }
+          aria-label="Select all"
+          className="translate-y-[2px]"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+          className="translate-y-[2px]"
+          onClick={(e) => e.stopPropagation()}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+      size: 40,
+    },
     {
       accessorKey: "first_name",
       header: ({ column }) => {

@@ -29,7 +29,9 @@ export function DataTableContent({ table, columns }: DataTableContentProps) {
                     <TableHead
                       key={header.id}
                       className={
-                        header.column.id === "actions"
+                        header.column.id === "select"
+                          ? "w-[50px] text-gray-900 font-semibold"
+                          : header.column.id === "actions"
                           ? "md:sticky md:right-0 z-10 bg-white border-l-2 border-gray-200 min-w-[200px] text-gray-900 font-semibold"
                           : header.column.id === "is_checked_in"
                           ? "min-w-[150px] text-gray-900 font-semibold"
@@ -73,7 +75,9 @@ export function DataTableContent({ table, columns }: DataTableContentProps) {
                     <TableCell
                       key={cell.id}
                       className={
-                        cell.column.id === "actions"
+                        cell.column.id === "select"
+                          ? "w-[50px] text-gray-700"
+                          : cell.column.id === "actions"
                           ? "md:sticky md:right-0 z-10 bg-white border-l-2 border-gray-200 min-w-[200px] text-gray-900"
                           : cell.column.id === "is_checked_in"
                           ? "min-w-[150px] text-gray-700"

@@ -3,6 +3,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { generateQRCodeBuffer } from "@/lib/qr-code";
 import { sendEmailWithQRCode } from "@/lib/email";
+import {
+  generateAppleWalletPass,
+  isWalletPassConfigured,
+} from "@/lib/wallet-pass";
 import type { FormEntry } from "@/types/form-entries";
 
 export type EmailSendResult = {
@@ -75,15 +79,29 @@ export async function sendQREmails(
       // Generate QR code
       const qrCodeBuffer = await generateQRCodeBuffer(participant.event_uid);
 
+      // Generate Apple Wallet pass if configured
+      let walletPass: { buffer: Buffer; filename: string } | undefined;
+      if (isWalletPassConfigured()) {
+        const passBuffer = await generateAppleWalletPass(participant);
+        if (passBuffer) {
+          walletPass = {
+            buffer: passBuffer,
+            filename: `KickSTART-2026-${participant.event_uid}.pkpass`,
+          };
+          console.log(`🍎 Wallet pass generated for ${participant.email}`);
+        }
+      }
+
       // Send email directly (no API route needed)
       console.log(`📧 Sending email to ${participant.email}`);
-      
+
       const emailResult = await sendEmailWithQRCode({
         to: participant.email,
         subject: emailSubject || getDefaultSubject(participant),
-        html: emailBody || getDefaultEmailBody(participant),
+        html: emailBody || getDefaultEmailBody(participant, !!walletPass),
         qrCode: qrCodeBuffer.toString("base64"),
         qrCodeFilename: `qr-code-${participant.event_uid}.png`,
+        walletPass,
       });
 
       if (emailResult.success) {
@@ -124,12 +142,20 @@ export async function sendQREmails(
 }
 
 function getDefaultSubject(participant: FormEntry): string {
-  return `Your KickSTART Luzon 2026 Check-in QR Code - ${participant.event_uid}`;
+  const island = participant.island || "Luzon";
+  return `Your KickSTART ${island} 2026 Check-in QR Code - ${participant.event_uid}`;
 }
 
-function getDefaultEmailBody(participant: FormEntry): string {
+function getDefaultEmailBody(
+  participant: FormEntry,
+  includeWalletInstructions = false
+): string {
   const fullName = `${participant.first_name} ${participant.middle_name ? participant.middle_name + " " : ""}${participant.last_name}${participant.suffix ? " " + participant.suffix : ""}`;
-  const eventDate = participant.preferred_date || "January 24, 2026";
+  const island = participant.island || "Luzon";
+  const eventDate =
+    island === "Luzon" || island === "Visayas"
+      ? "February 28, 2026"
+      : "March 14, 2026";
   const seatInfo = participant.seat_assignment || "To be assigned";
 
   return `
@@ -142,14 +168,14 @@ function getDefaultEmailBody(participant: FormEntry): string {
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="background: linear-gradient(135deg, #0f9dfe 0%, #0d8ae8 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-    <h1 style="color: white; margin: 0; font-size: 28px;">KickSTART Luzon 2026</h1>
+    <h1 style="color: white; margin: 0; font-size: 28px;">KickSTART ${island} 2026</h1>
     <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 16px;">START-DOST General Assembly</p>
   </div>
   
   <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; border-top: none; border-radius: 0 0 10px 10px;">
     <h2 style="color: #0f9dfe; margin-top: 0;">Hello ${participant.first_name}!</h2>
     
-    <p>Thank you for registering for <strong>KickSTART Luzon 2026: START-DOST General Assembly</strong>.</p>
+    <p>Thank you for registering for <strong>KickSTART ${island} 2026: START-DOST General Assembly</strong>.</p>
     
     <p>Your registration has been <strong style="color: #10b981;">accepted</strong>! Please find your check-in QR code attached to this email.</p>
     
@@ -174,7 +200,7 @@ function getDefaultEmailBody(participant: FormEntry): string {
         </tr>
         <tr>
           <td style="padding: 8px 0; color: #666;"><strong>Location:</strong></td>
-          <td style="padding: 8px 0; color: #333;">Batangas State University - Main Campus</td>
+          <td style="padding: 8px 0; color: #333;">${island === "Luzon" ? "Batangas State University - Alangilan Campus" : island === "Visayas" ? "University of Southern Philippines Foundation" : "University of Mindanao - Main Campus"}</td>
         </tr>
       </table>
     </div>
@@ -183,6 +209,7 @@ function getDefaultEmailBody(participant: FormEntry): string {
       <h3 style="color: #856404; margin-top: 0;">📱 Important Instructions</h3>
       <ul style="color: #856404; padding-left: 20px;">
         <li>Your QR code is attached to this email</li>
+        ${includeWalletInstructions ? '<li><strong>Add to Apple Wallet:</strong> Open the .pkpass attachment on your iPhone to add your ticket to Wallet for quick access at check-in</li>' : ""}
         <li>Save the QR code image to your phone or print it out</li>
         <li>Present your QR code at the check-in counter on the event day</li>
         <li>Make sure your QR code is clearly visible and not damaged</li>
@@ -193,7 +220,7 @@ function getDefaultEmailBody(participant: FormEntry): string {
     
     <p style="margin-top: 20px;">
       Best regards,<br>
-      <strong>KickSTART Luzon 2026 Organizing Committee</strong>
+      <strong>KickSTART 2026 Organizing Committee</strong>
     </p>
     
     <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;">

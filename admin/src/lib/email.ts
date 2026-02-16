@@ -7,6 +7,8 @@ export interface SendEmailOptions {
   html: string;
   qrCode: string; // base64 encoded
   qrCodeFilename: string;
+  /** Optional Apple Wallet .pkpass attachment for "Add to Wallet" */
+  walletPass?: { buffer: Buffer; filename: string };
 }
 
 export interface SendEmailResult {
@@ -24,7 +26,7 @@ export interface SendEmailResult {
 export async function sendEmailWithQRCode(
   options: SendEmailOptions
 ): Promise<SendEmailResult> {
-  const { to, subject, html, qrCode, qrCodeFilename } = options;
+  const { to, subject, html, qrCode, qrCodeFilename, walletPass } = options;
 
   // Check for SMTP configuration (Gmail)
   const smtpHost = process.env.SMTP_HOST;
@@ -77,17 +79,22 @@ export async function sendEmailWithQRCode(
         },
       });
 
+      const attachments: { filename: string; content: Buffer }[] = [
+        { filename: qrCodeFilename, content: qrCodeBuffer },
+      ];
+      if (walletPass) {
+        attachments.push({
+          filename: walletPass.filename,
+          content: walletPass.buffer,
+        });
+      }
+
       const info = await transporter.sendMail({
         from: emailFrom,
         to: to,
         subject: subject,
         html: html,
-        attachments: [
-          {
-            filename: qrCodeFilename,
-            content: qrCodeBuffer,
-          },
-        ],
+        attachments,
       });
 
       return {
@@ -108,17 +115,22 @@ export async function sendEmailWithQRCode(
     try {
       const resend = new Resend(resendApiKey);
 
+      const attachments: { filename: string; content: Buffer }[] = [
+        { filename: qrCodeFilename, content: qrCodeBuffer },
+      ];
+      if (walletPass) {
+        attachments.push({
+          filename: walletPass.filename,
+          content: walletPass.buffer,
+        });
+      }
+
       const { data, error } = await resend.emails.send({
         from: emailFrom,
         to: [to],
         subject: subject,
         html: html,
-        attachments: [
-          {
-            filename: qrCodeFilename,
-            content: qrCodeBuffer,
-          },
-        ],
+        attachments,
       });
 
       if (error) {
