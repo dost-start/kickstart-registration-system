@@ -20,16 +20,20 @@ import { Table } from "@tanstack/react-table";
 import type { FormEntry } from "@/types/form-entries";
 import { ChevronDown } from "lucide-react";
 
+const ISLAND_OPTIONS = ["Luzon", "Visayas", "Mindanao"] as const;
+
 interface TableFiltersProps {
   table: Table<FormEntry>;
   searchColumn: string;
   searchValue: string;
   statusFilter: string;
   checkInFilter: string;
+  islandFilter: string;
   onSearchColumnChange: (column: string) => void;
   onSearchChange: (value: string) => void;
   onStatusFilterChange: (value: string) => void;
   onCheckInFilterChange: (value: string) => void;
+  onIslandFilterChange: (value: string) => void;
 }
 
 const searchableColumns = [
@@ -56,10 +60,12 @@ export function TableFilters({
   searchValue,
   statusFilter,
   checkInFilter,
+  islandFilter,
   onSearchColumnChange,
   onSearchChange,
   onStatusFilterChange,
   onCheckInFilterChange,
+  onIslandFilterChange,
 }: TableFiltersProps) {
   return (
     <div className="flex items-start md:items-end space-x-4 gap-4 flex-wrap">
@@ -142,6 +148,25 @@ export function TableFilters({
             <SelectItem value="all" className="text-gray-900 hover:bg-[#0f9dfe]/10">All Check-in</SelectItem>
             <SelectItem value="checked_in" className="text-gray-900 hover:bg-[#0f9dfe]/10">Checked In</SelectItem>
             <SelectItem value="not_checked_in" className="text-gray-900 hover:bg-[#0f9dfe]/10">Not Checked In</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="island-filter" className="text-sm font-medium text-gray-700">
+          Island
+        </Label>
+        <Select value={islandFilter} onValueChange={onIslandFilterChange}>
+          <SelectTrigger className="w-[140px] bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-[#0f9dfe] focus:ring-[#0f9dfe]/20" id="island-filter">
+            <SelectValue placeholder="All Islands" />
+          </SelectTrigger>
+          <SelectContent className="bg-white border-gray-200">
+            <SelectItem value="all" className="text-gray-900 hover:bg-[#0f9dfe]/10">All Islands</SelectItem>
+            {ISLAND_OPTIONS.map((island) => (
+              <SelectItem key={island} value={island} className="text-gray-900 hover:bg-[#0f9dfe]/10">
+                {island}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

@@ -49,6 +49,7 @@ export function RegistrantDataTable({ data, onDataChange }: DataTableProps) {
   const [searchValue, setSearchValue] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [checkInFilter, setCheckInFilter] = useState<string>("all");
+  const [islandFilter, setIslandFilter] = useState<string>("all");
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isBulkUpdating, setIsBulkUpdating] = useState(false);
 
@@ -205,6 +206,15 @@ export function RegistrantDataTable({ data, onDataChange }: DataTableProps) {
     }
   };
 
+  const handleIslandFilterChange = (value: string) => {
+    setIslandFilter(value);
+    if (value === "all") {
+      table.getColumn("island")?.setFilterValue("");
+    } else {
+      table.getColumn("island")?.setFilterValue(value);
+    }
+  };
+
   const selectedCount = table.getSelectedRowModel().rows.length;
 
   return (
@@ -216,10 +226,12 @@ export function RegistrantDataTable({ data, onDataChange }: DataTableProps) {
         searchValue={searchValue}
         statusFilter={statusFilter}
         checkInFilter={checkInFilter}
+        islandFilter={islandFilter}
         onSearchColumnChange={handleSearchColumnChange}
         onSearchChange={handleSearchChange}
         onStatusFilterChange={handleStatusFilterChange}
         onCheckInFilterChange={handleCheckInFilterChange}
+        onIslandFilterChange={handleIslandFilterChange}
       />
 
       {/* Bulk Status Actions */}
