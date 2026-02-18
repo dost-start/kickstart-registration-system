@@ -251,7 +251,7 @@ export async function submitRegistration(data: RegistrationFormData) {
     }
 
     const formEntry: TablesInsert<"kickstart_form_entries"> = {
-      spas_id: validatedData.spasId.trim(),
+      spas_id: null,
       first_name: validatedData.firstName,
       middle_name: validatedData.middleName ?? null,
       last_name: validatedData.lastName,
@@ -266,8 +266,8 @@ export async function submitRegistration(data: RegistrationFormData) {
         validatedData.scholarshipType as unknown as Database["public"]["Enums"]["scholarship_type"],
       status: "pending",
       is_checked_in: false,
-      has_attended_ga: validatedData.hasAttendedGA,
-      has_dost_sa: validatedData.hasDostSa ?? false,
+      has_attended_ga: false,
+      has_dost_sa: false,
       dietary_restrictions: dietaryRestrictions || null,
       preferred_date: null,
       event_uid: eventUidResult.uid,

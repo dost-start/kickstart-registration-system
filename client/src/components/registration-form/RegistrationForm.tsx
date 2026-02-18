@@ -62,7 +62,6 @@ export default function RegistrationForm() {
     defaultValues: {
       email: "",
       contactNumber: "",
-      spasId: "",
       firstName: "",
       middleName: "",
       lastName: "",
@@ -72,8 +71,6 @@ export default function RegistrationForm() {
       course: undefined,
       scholarshipType: undefined,
       yearAwarded: undefined,
-      hasAttendedGA: false,
-      hasDostSa: false,
       dietaryRestrictions: "",
       island: undefined,
       isStartMember: false,
@@ -372,28 +369,6 @@ export default function RegistrationForm() {
               )}
             />
 
-            {/* SPAS ID */}
-            <FormField
-              control={form.control}
-              name="spasId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-semibold">
-                    SPAS ID *
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="e.g. U-2022-4A-00000"
-                      {...field}
-                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-[#0f9dfe]/50 focus:ring-[#0f9dfe]/20"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             {/* School / University */}
             <FormField
               control={form.control}
@@ -581,50 +556,6 @@ export default function RegistrationForm() {
                   </FormItem>
                 );
               }}
-            />
-
-            {/* Past General Assembly attendance */}
-            <FormField
-              control={form.control}
-              name="hasAttendedGA"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value || false}
-                      onCheckedChange={(checked) => field.onChange(!!checked)}
-                      className="border-gray-300 data-[state=checked]:bg-[#0f9dfe] data-[state=checked]:border-[#0f9dfe]"
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel className="text-gray-700 font-semibold">
-                      Have you attended a past General Assembly?
-                    </FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-
-            {/* Has DOST-SA */}
-            <FormField
-              control={form.control}
-              name="hasDostSa"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value || false}
-                      onCheckedChange={(checked) => field.onChange(!!checked)}
-                      className="border-gray-300 data-[state=checked]:bg-[#0f9dfe] data-[state=checked]:border-[#0f9dfe]"
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel className="text-gray-700 font-semibold">
-                      Are you currently assigned a DOST-SA?
-                    </FormLabel>
-                  </div>
-                </FormItem>
-              )}
             />
 
             {/* START Member */}
