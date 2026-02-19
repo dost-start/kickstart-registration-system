@@ -215,6 +215,9 @@ function getDefaultEmailBody(
         <li>Save the QR code image to your phone or print it out</li>
         <li>Present your QR code at the check-in counter on the event day</li>
         <li>Make sure your QR code is clearly visible and not damaged</li>
+        <li>Please bring a <strong>tablet or iPad (or similar device) or Laptop</strong> that you can use during the ideathon and workshop.</li>
+        <li><strong>Huwag magpapalipas ng gutom ah :))</strong></li>
+
       </ul>
     </div>
 
