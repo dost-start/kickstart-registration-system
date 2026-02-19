@@ -216,8 +216,10 @@ function getDefaultEmailBody(
         <li>Present your QR code at the check-in counter on the event day</li>
         <li>Make sure your QR code is clearly visible and not damaged</li>
         <li>Please bring a <strong>tablet or iPad (or similar device) or Laptop</strong> that you can use during the ideathon and workshop.</li>
-        <li><strong>Huwag magpapalipas ng gutom ah :))</strong></li>
-
+        <li>Present your valid ID or school ID to the guard upon entry for verification. <strong>No ID, no entry.</strong></li>
+        <li>No backing out.</li>
+        <li>Registration starts at <strong>12NN</strong>.</li>
+        <li>Lastly, <strong>Huwag magpapalipas ng gutom ah :))</strong></li>
       </ul>
     </div>
 
@@ -229,8 +231,7 @@ function getDefaultEmailBody(
       <ol style="color: #92400e; padding-left: 20px; margin: 0;">
         <li><strong>STRICTLY NO PARKING</strong> (drop and go lang pwede)</li>
         <li><strong>STRICTLY NO THROWING OF TRASH ANYWHERE</strong> (pakiuwi ang trash with you)</li>
-        <li>No backing out.</li>
-        <li>Registration starts at <strong>12NN</strong>.</li>
+
         <li>Additionally, <strong>no plastic bottles will be allowed upon entry</strong>.</li>
       </ol>
     </div>
