@@ -219,7 +219,7 @@ function getDefaultEmailBody(
         <li>Present your valid ID or school ID to the guard upon entry for verification. <strong>No ID, no entry.</strong></li>
         <li>No backing out.</li>
         <li>Registration starts at <strong>12NN</strong>.</li>
-        <li>Lastly, <strong>Huwag magpapalipas ng gutom ah :))</strong></li>
+        <li>Lastly, <strong>huwag magpapalipas ng gutom ah :))</strong></li>
       </ul>
     </div>
 
