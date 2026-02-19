@@ -156,7 +156,6 @@ function getDefaultEmailBody(
     island === "Luzon" || island === "Visayas"
       ? "February 28, 2026"
       : "March 14, 2026";
-  const seatInfo = participant.seat_assignment || "To be assigned";
 
   return `
 <!DOCTYPE html>
@@ -194,13 +193,16 @@ function getDefaultEmailBody(
           <td style="padding: 8px 0; color: #666;"><strong>Date:</strong></td>
           <td style="padding: 8px 0; color: #333;">${eventDate}</td>
         </tr>
-        <tr>
-          <td style="padding: 8px 0; color: #666;"><strong>Seat Assignment:</strong></td>
-          <td style="padding: 8px 0; color: #333;">${seatInfo}</td>
-        </tr>
+        
         <tr>
           <td style="padding: 8px 0; color: #666;"><strong>Location:</strong></td>
-          <td style="padding: 8px 0; color: #333;">${island === "Luzon" ? "Batangas State University - Alangilan Campus" : island === "Visayas" ? "University of Southern Philippines Foundation" : "University of Mindanao - Main Campus"}</td>
+          <td style="padding: 8px 0; color: #333;">${
+            island === "Luzon"
+              ? "Batangas State University, The National Engineering University (Alangilan Campus)"
+              : island === "Visayas"
+                ? "University of Southern Philippines Foundation"
+                : "University of Mindanao - Main Campus"
+          }</td>
         </tr>
       </table>
     </div>
@@ -215,6 +217,23 @@ function getDefaultEmailBody(
         <li>Make sure your QR code is clearly visible and not damaged</li>
       </ul>
     </div>
+
+    ${
+      island === "Luzon"
+        ? `
+    <div style="background: #fef3c7; border: 1px solid #fbbf24; padding: 20px; margin: 25px 0; border-radius: 5px;">
+      <h3 style="color: #92400e; margin-top: 0;">🔔 Luzon-Specific Reminders</h3>
+      <ol style="color: #92400e; padding-left: 20px; margin: 0;">
+        <li><strong>STRICTLY NO PARKING</strong> (drop and go lang pwede)</li>
+        <li><strong>STRICTLY NO THROWING OF TRASH ANYWHERE</strong> (pakiuwi ang trash with you)</li>
+        <li>No backing out.</li>
+        <li>Registration starts at <strong>12NN</strong>.</li>
+        <li>Additionally, <strong>no plastic bottles will be allowed upon entry</strong>.</li>
+      </ol>
+    </div>
+    `
+        : ""
+    }
     
     <p style="margin-top: 30px;">We look forward to seeing you at the event!</p>
     

@@ -53,7 +53,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   // If verification failed, show error state
   if (!verificationResult.success) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-950 to-black">
+      <div className="min-h-screen bg-gradient-to-b from-[#e0f3ff] via-white to-white">
         <Navbar />
         <div className="pt-32 pb-16 flex items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="max-w-xl mx-auto text-center relative bg-white rounded-2xl p-8 sm:p-10 shadow-2xl border border-gray-200 overflow-hidden">
@@ -86,7 +86,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
   const hasEventDate = eventDate && eventDate !== "TBA";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-900 via-blue-950 to-black">
+    <div className="min-h-screen bg-gradient-to-b from-[#e0f3ff] via-white to-white">
       <Navbar />
       <div className="pt-28 sm:pt-32 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
@@ -139,7 +139,7 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
                 </div>
                 <div className="text-left min-w-0">
                   <h3 className="font-semibold text-gray-900 mb-1">Check Your Email</h3>
-                  <p className="text-sm text-gray-600 truncate">
+                  <p className="text-sm text-gray-600">
                     We&apos;ll send updates to {registrationData?.email}
                   </p>
                 </div>
@@ -173,13 +173,22 @@ export default async function SuccessPage({ searchParams }: SuccessPageProps) {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button size="lg" asChild className="font-semibold rounded-full shadow-lg">
+              <Button
+                size="lg"
+                asChild
+                className="w-full sm:w-auto font-semibold rounded-full shadow-lg bg-[#0f9dfe] hover:bg-[#0d8ae8] text-white"
+              >
                 <a href="/primer.pdf" target="_blank" rel="noopener noreferrer">
                   <FileText className="w-5 h-5 mr-2" />
                   View Primer
                 </a>
               </Button>
-              <Button variant="outline" size="lg" asChild className="font-semibold rounded-full border-2">
+              <Button
+                variant="outline"
+                size="lg"
+                asChild
+                className="w-full sm:w-auto font-semibold rounded-full border-2"
+              >
                 <Link href="/kickstart">Back to Home</Link>
               </Button>
             </div>
