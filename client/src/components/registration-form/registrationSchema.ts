@@ -50,7 +50,7 @@ export const registrationSchema = z.object({
   dietaryRestrictions: z.string().optional().or(z.literal("")),
 
   // Prioritization / limits
-  island: z.enum(ISLAND_OPTIONS, { message: "Please select an island" }).optional(),
+  island: z.enum(ISLAND_OPTIONS, { message: "Please select an island" }),
   isStartMember: z.boolean().optional(),
   whyJoin: z.string().optional(),
 

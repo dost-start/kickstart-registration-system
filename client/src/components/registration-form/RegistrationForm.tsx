@@ -522,7 +522,7 @@ export default function RegistrationForm() {
                 return (
                   <FormItem>
                     <FormLabel className="text-gray-700 font-semibold">
-                      Island (for slot allocation)
+                      Island (for slot allocation) *
                     </FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
