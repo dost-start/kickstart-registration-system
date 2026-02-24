@@ -9,6 +9,8 @@ export interface SendEmailOptions {
   qrCodeFilename: string;
   /** Optional Apple Wallet .pkpass attachment for "Add to Wallet" */
   walletPass?: { buffer: Buffer; filename: string };
+  /** Optional venue map attachment (e.g. Luzon venue map image) */
+  venueMap?: { buffer: Buffer; filename: string };
 }
 
 export interface SendEmailResult {
@@ -26,7 +28,8 @@ export interface SendEmailResult {
 export async function sendEmailWithQRCode(
   options: SendEmailOptions
 ): Promise<SendEmailResult> {
-  const { to, subject, html, qrCode, qrCodeFilename, walletPass } = options;
+  const { to, subject, html, qrCode, qrCodeFilename, walletPass, venueMap } =
+    options;
 
   // Check for SMTP configuration (Gmail)
   const smtpHost = process.env.SMTP_HOST;
@@ -88,6 +91,12 @@ export async function sendEmailWithQRCode(
           content: walletPass.buffer,
         });
       }
+      if (venueMap) {
+        attachments.push({
+          filename: venueMap.filename,
+          content: venueMap.buffer,
+        });
+      }
 
       const info = await transporter.sendMail({
         from: emailFrom,
@@ -122,6 +131,12 @@ export async function sendEmailWithQRCode(
         attachments.push({
           filename: walletPass.filename,
           content: walletPass.buffer,
+        });
+      }
+      if (venueMap) {
+        attachments.push({
+          filename: venueMap.filename,
+          content: venueMap.buffer,
         });
       }
 

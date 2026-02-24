@@ -8,6 +8,8 @@ import {
   isWalletPassConfigured,
 } from "@/lib/wallet-pass";
 import type { FormEntry } from "@/types/form-entries";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 export type EmailSendResult = {
   success: boolean;
@@ -95,6 +97,31 @@ export async function sendQREmails(
       // Send email directly (no API route needed)
       console.log(`📧 Sending email to ${participant.email}`);
 
+      // Attach Luzon-specific venue map image when applicable
+      let venueMap:
+        | {
+            buffer: Buffer;
+            filename: string;
+          }
+        | undefined;
+
+      if (participant.island === "Luzon") {
+        try {
+          const venueMapPath = path.join(
+            process.cwd(),
+            "public",
+            "venue-map.JPEG"
+          );
+          const buffer = await fs.readFile(venueMapPath);
+          venueMap = {
+            buffer,
+            filename: "KickSTART-2026-Luzon-Venue-Map.jpeg",
+          };
+        } catch (error) {
+          console.error("Failed to load Luzon venue map image:", error);
+        }
+      }
+
       const emailResult = await sendEmailWithQRCode({
         to: participant.email,
         subject: emailSubject || getDefaultSubject(participant),
@@ -102,6 +129,7 @@ export async function sendQREmails(
         qrCode: qrCodeBuffer.toString("base64"),
         qrCodeFilename: `qr-code-${participant.event_uid}.png`,
         walletPass,
+        venueMap,
       });
 
       if (emailResult.success) {
@@ -198,7 +226,7 @@ function getDefaultEmailBody(
           <td style="padding: 8px 0; color: #666;"><strong>Location:</strong></td>
           <td style="padding: 8px 0; color: #333;">${
             island === "Luzon"
-              ? "Batangas State University, The National Engineering University (Alangilan Campus)"
+              ? "Batangas State University, The National Engineering University (Alangilan Campus) – Leonardo Da Vinci Amphitheater (3rd floor of Albert Einstein Building)"
               : island === "Visayas"
                 ? "University of Southern Philippines Foundation"
                 : "University of Mindanao - Main Campus"
@@ -231,8 +259,10 @@ function getDefaultEmailBody(
       <ol style="color: #92400e; padding-left: 20px; margin: 0;">
         <li><strong>STRICTLY NO PARKING</strong> (drop and go lang pwede)</li>
         <li><strong>STRICTLY NO THROWING OF TRASH ANYWHERE</strong> (pakiuwi ang trash with you)</li>
-
+        <li>Gate 2 will be used for <strong>Entrance</strong>, while Gate 3 will be used for <strong>Exit</strong>.</li>
+        <li>Participants shall only walk along the pathway indicated in the venue map.</li>
         <li>Additionally, <strong>no plastic bottles will be allowed upon entry</strong>.</li>
+        <li>The detailed <strong>venue map is attached</strong> to this email for your reference.</li>
       </ol>
     </div>
     `
