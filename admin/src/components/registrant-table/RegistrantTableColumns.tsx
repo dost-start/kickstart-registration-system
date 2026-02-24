@@ -429,7 +429,7 @@ export default function RegistrantTableColumns({
         const university = row.getValue("university") as string;
         const universityCustom = "Other - " + (row.original.university_custom || "");
         const displayValue = university === "Other" ? universityCustom : university;
-        return <div>{truncateText(displayValue, 20)}</div>;
+        return <div className="min-w-[200px] whitespace-normal break-words">{displayValue}</div>;
       },
     },
     {
