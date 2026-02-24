@@ -14,7 +14,7 @@ const REGIONAL_EVENTS = [
   },
   {
     island: "Visayas",
-    date: "February 28, 2026",
+    date: "March 7, 2026",
     day: "Saturday",
     time: "12:00 PM - 5:00 PM",
     location: "University of Southern Philippines Foundation",
