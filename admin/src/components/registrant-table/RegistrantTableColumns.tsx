@@ -311,8 +311,8 @@ export default function RegistrantTableColumns({
           .join(" ");
 
         return (
-          <div className="font-medium min-w-[150px]">
-            {truncateText(fullName, 25)}
+          <div className="font-medium min-w-[150px] whitespace-normal break-words">
+            {fullName}
           </div>
         );
       },
