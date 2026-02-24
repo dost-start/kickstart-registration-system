@@ -612,8 +612,8 @@ export default function RegistrantTableColumns({
       cell: ({ row }) => {
         const whyJoin = row.original.why_join as string;
         return (
-          <div className="max-w-[250px]">
-            {whyJoin ? truncateText(whyJoin, 40) : <span className="text-xs text-gray-500">Not provided</span>}
+          <div className="min-w-[250px] whitespace-normal break-words">
+            {whyJoin ? whyJoin : <span className="text-xs text-gray-500">Not provided</span>}
           </div>
         );
       },
