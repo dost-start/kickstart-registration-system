@@ -266,7 +266,20 @@ function getDefaultEmailBody(
       </ol>
     </div>
     `
-        : ""
+        : island === "Mindanao"
+          ? `
+    <div style="background: #fef3c7; border: 1px solid #fbbf24; padding: 20px; margin: 25px 0; border-radius: 5px;">
+      <h3 style="color: #92400e; margin-top: 0;">🔔 Mindanao-Specific Reminders</h3>
+      <ol style="color: #92400e; padding-left: 20px; margin: 0;">
+        <li><strong>STRICTLY NO PARKING</strong> (drop-and-go only).</li>
+        <li><strong>STRICTLY NO THROWING OF TRASH ANYWHERE</strong></li>
+        <li>You may use the <strong>Matina Gate</strong> or <strong>Maa Gate</strong> for entry.</li>
+        <li>Please be mindful of the university dress code. Refer here: <a href="https://online.fliphtml5.com/zyzbr/obgp/" style="color: #92400e;">https://online.fliphtml5.com/zyzbr/obgp/</a></li>
+        <li>Please present a valid ID or school ID to the guard upon entry for verification. Use the same university/organization ID you registered with. <strong>No ID, no entry.</strong></li>
+      </ol>
+    </div>
+    `
+          : ""
     }
     
     <p style="margin-top: 30px;">We look forward to seeing you at the event!</p>
