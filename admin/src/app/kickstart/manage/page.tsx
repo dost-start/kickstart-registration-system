@@ -118,12 +118,12 @@ export default function EventManagement() {
     refreshData(); // Also refresh the data
   };
 
-  const handleExportCSV = (dateFilter?: string) => {
+  const handleExportCSV = (islandFilter?: string) => {
     let filteredRegistrants = registrants;
     
-    if (dateFilter && dateFilter !== "all") {
+    if (islandFilter && islandFilter !== "all") {
       filteredRegistrants = registrants.filter(
-        (r) => r.preferred_date === dateFilter
+        (r) => r.island === islandFilter
       );
     }
     
@@ -193,6 +193,13 @@ export default function EventManagement() {
             <DropdownMenuItem onClick={() => handleExportCSV("all")}>
               Export All
             </DropdownMenuItem>
+            {Array.from(new Set(registrants.map((r) => r.island).filter(Boolean)))
+              .sort()
+              .map((island) => (
+                <DropdownMenuItem key={island} onClick={() => handleExportCSV(island!)}>
+                  Export {island}
+                </DropdownMenuItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
         <Link href="/kickstart/check-in">

@@ -112,11 +112,86 @@ export async function exportRegistrantsToCSV(): Promise<void> {
 /**
  * Export specific registrants to CSV file
  */
-export function exportRegistrantsListToCSV(registrants: FormEntry[]): void {
+export function exportRegistrantsListToCSV(registrants: any[]) {
   if (registrants.length === 0) return;
 
-  const csvContent = generateCSVContent(registrants);
-  const filename = `registrants_${new Date().toISOString().split("T")[0]}.csv`;
+  const headers = [
+    "ID",
+    "First Name",
+    "Middle Name",
+    "Last Name",
+    "Suffix",
+    "Email",
+    "Contact Number",
+    "SPAS ID",
+    "Event UID",
+    "University",
+    "University (Custom)",
+    "Course",
+    "Scholarship Type",
+    "Year Awarded",
+    "Island",
+    "Preferred Date",
+    "Seat Assignment",
+    "Dietary Restrictions",
+    "Why Join",
+    "Has Attended GA",
+    "Is START Member",
+    "Status",
+    "Is Checked In",
+    "Created At",
+    "Updated At",
+  ];
 
-  downloadCSV(csvContent, filename);
+  const escapeCSV = (value: any) => {
+    if (value === null || value === undefined) return "";
+    const str = String(value);
+    if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+  };
+
+  const rows = registrants.map((r) =>
+    [
+      r.id,
+      r.first_name,
+      r.middle_name,
+      r.last_name,
+      r.suffix,
+      r.email,
+      r.contact_number,
+      r.spas_id,
+      r.event_uid,
+      r.university,
+      r.university_custom,
+      r.course,
+      r.scholarship_type,
+      r.year_awarded,
+      r.island,
+      r.preferred_date,
+      r.seat_assignment,
+      r.dietary_restrictions,
+      r.why_join,
+      r.has_attended_ga,
+      r.is_start_member,
+      r.status,
+      r.is_checked_in,
+      r.created_at,
+      r.updated_at,
+    ]
+      .map(escapeCSV)
+      .join(",")
+  );
+
+  const csv = [headers.join(","), ...rows].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `registrants_${new Date().toISOString().split("T")[0]}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
