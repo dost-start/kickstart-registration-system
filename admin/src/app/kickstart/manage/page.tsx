@@ -22,6 +22,7 @@ import { AddRegistrantSheet } from "@/components/AddRegistrantSheet";
 import { EventRegistrationToggleSheet } from "@/components/EventRegistrationToggleSheet";
 import { RegistrationStatusBadge } from "@/components/RegistrationStatusBadge";
 import { SendQREmailSheet } from "@/components/SendQREmailSheet";
+import { EmailBlastSheet } from "@/components/EmailBlastSheet";
 
 export default function EventManagement() {
   const router = useRouter();
@@ -33,41 +34,44 @@ export default function EventManagement() {
     pending: 0,
     waitlisted: 0,
     checkedIn: 0,
+    byIsland: {},
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusKey, setStatusKey] = useState(0); // Key to force re-render of status badge
+
+  const computeStats = (registrantsData: FormEntry[]): RegistrantStats => {
+    const total = registrantsData.length;
+    const accepted = registrantsData.filter((r) => r.status === "accepted").length;
+    const rejected = registrantsData.filter((r) => r.status === "rejected").length;
+    const pending = registrantsData.filter((r) => r.status === "pending").length;
+    const waitlisted = registrantsData.filter((r) => r.status === "waitlisted").length;
+    const checkedIn = registrantsData.filter((r) => r.is_checked_in).length;
+
+    const byIsland: Record<string, { total: number; accepted: number; rejected: number; pending: number; waitlisted: number; checkedIn: number }> = {};
+    for (const r of registrantsData) {
+      const island = r.island;
+      if (!island) continue;
+      if (!byIsland[island]) {
+        byIsland[island] = { total: 0, accepted: 0, rejected: 0, pending: 0, waitlisted: 0, checkedIn: 0 };
+      }
+      byIsland[island].total++;
+      if (r.status === "accepted") byIsland[island].accepted++;
+      if (r.status === "rejected") byIsland[island].rejected++;
+      if (r.status === "pending") byIsland[island].pending++;
+      if (r.status === "waitlisted") byIsland[island].waitlisted++;
+      if (r.is_checked_in) byIsland[island].checkedIn++;
+    }
+
+    return { total, accepted, rejected, pending, waitlisted, checkedIn, byIsland };
+  };
 
   const fetchData = async () => {
     try {
       setIsLoading(true);
       const registrantsData = await fetchAllRegistrants();
       setRegistrants(registrantsData);
-
-      // Calculate stats from the fetched data
-      const total = registrantsData.length;
-      const accepted = registrantsData.filter(
-        (r) => r.status === "accepted"
-      ).length;
-      const rejected = registrantsData.filter(
-        (r) => r.status === "rejected"
-      ).length;
-      const pending = registrantsData.filter(
-        (r) => r.status === "pending"
-      ).length;
-      const waitlisted = registrantsData.filter(
-        (r) => r.status === "waitlisted"
-      ).length;
-      const checkedIn = registrantsData.filter((r) => r.is_checked_in).length;
-
-      setStats({
-        total,
-        accepted,
-        rejected,
-        pending,
-        waitlisted,
-        checkedIn,
-      });
+      setStats(computeStats(registrantsData));
     } catch (err) {
       console.error("Error fetching data:", err);
       setError("Failed to load registrant data");
@@ -81,31 +85,7 @@ export default function EventManagement() {
     try {
       const registrantsData = await fetchAllRegistrants();
       setRegistrants(registrantsData);
-
-      // Calculate stats from the fetched data
-      const total = registrantsData.length;
-      const accepted = registrantsData.filter(
-        (r) => r.status === "accepted"
-      ).length;
-      const rejected = registrantsData.filter(
-        (r) => r.status === "rejected"
-      ).length;
-      const pending = registrantsData.filter(
-        (r) => r.status === "pending"
-      ).length;
-      const waitlisted = registrantsData.filter(
-        (r) => r.status === "waitlisted"
-      ).length;
-      const checkedIn = registrantsData.filter((r) => r.is_checked_in).length;
-
-      setStats({
-        total,
-        accepted,
-        rejected,
-        pending,
-        waitlisted,
-        checkedIn,
-      });
+      setStats(computeStats(registrantsData));
     } catch (err) {
       console.error("Error refreshing data:", err);
       // Don't set error state here as it would disrupt the UI
@@ -257,6 +237,7 @@ export default function EventManagement() {
                 </h3>
               </div>
               <div className="flex items-center gap-2">
+                <EmailBlastSheet participants={registrants} />
                 <SendQREmailSheet
                   participants={registrants}
                   onSent={refreshData}

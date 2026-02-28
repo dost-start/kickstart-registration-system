@@ -131,7 +131,7 @@ export function TableFilters({
             <SelectItem value="pending" className="text-gray-900 hover:bg-[#0f9dfe]/10">Pending</SelectItem>
             <SelectItem value="accepted" className="text-gray-900 hover:bg-[#0f9dfe]/10">Accepted</SelectItem>
             <SelectItem value="rejected" className="text-gray-900 hover:bg-[#0f9dfe]/10">Rejected</SelectItem>
-            <SelectItem value="waitlist" className="text-gray-900 hover:bg-[#0f9dfe]/10">Waitlist</SelectItem>
+            <SelectItem value="waitlisted" className="text-gray-900 hover:bg-[#0f9dfe]/10">Waitlisted</SelectItem>
           </SelectContent>
         </Select>
       </div>

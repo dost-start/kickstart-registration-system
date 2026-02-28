@@ -20,7 +20,6 @@ import {
   handleStatusUpdate,
   handleBatchStatusUpdate,
 } from "@/lib/table-actions";
-import { sendQREmails } from "@/app/actions/send-qr-emails";
 import type { FormEntry, StatusType } from "@/types/form-entries";
 import { Button } from "@/components/ui/button";
 import { DataTableContent } from "./DataTableContent";
@@ -59,14 +58,6 @@ export function RegistrantDataTable({ data, onDataChange }: DataTableProps) {
       const registrant = data.find((r) => r.id === id);
       if (registrant) {
         await handleStatusUpdate(registrant, newStatus, onDataChange);
-        // Send QR email when status is changed to accepted
-        if (newStatus === "accepted" && registrant.email && registrant.event_uid) {
-          try {
-            await sendQREmails([id]);
-          } catch (emailErr) {
-            console.error("Failed to send acceptance email:", emailErr);
-          }
-        }
       }
     } catch (error) {
       console.error("Failed to update status:", error);
@@ -149,19 +140,6 @@ export function RegistrantDataTable({ data, onDataChange }: DataTableProps) {
         onDataChange();
         setRowSelection({});
       });
-      // Send QR emails when bulk accepting
-      if (newStatus === "accepted") {
-        const toEmail = selectedRows
-          .filter((r) => r.original.email && r.original.event_uid)
-          .map((r) => r.original.id);
-        if (toEmail.length > 0) {
-          try {
-            await sendQREmails(toEmail);
-          } catch (emailErr) {
-            console.error("Failed to send acceptance emails:", emailErr);
-          }
-        }
-      }
     } catch (error) {
       console.error("Failed to bulk update status:", error);
     } finally {
@@ -201,8 +179,10 @@ export function RegistrantDataTable({ data, onDataChange }: DataTableProps) {
     setCheckInFilter(value);
     if (value === "all") {
       table.getColumn("is_checked_in")?.setFilterValue("");
+    } else if (value === "checked_in") {
+      table.getColumn("is_checked_in")?.setFilterValue("yes");
     } else {
-      table.getColumn("is_checked_in")?.setFilterValue(value === "checked_in");
+      table.getColumn("is_checked_in")?.setFilterValue("no");
     }
   };
 

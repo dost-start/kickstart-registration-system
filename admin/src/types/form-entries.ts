@@ -8,6 +8,15 @@ export type FormEntryUpdate =
 
 export type StatusType = Database["public"]["Enums"]["status"];
 
+export interface IslandStats {
+  total: number;
+  accepted: number;
+  rejected: number;
+  pending: number;
+  waitlisted: number;
+  checkedIn: number;
+}
+
 export interface RegistrantStats {
   total: number;
   accepted: number;
@@ -15,6 +24,7 @@ export interface RegistrantStats {
   pending: number;
   waitlisted: number;
   checkedIn: number;
+  byIsland: Record<string, IslandStats>;
 }
 
 export interface PaginationInfo {
