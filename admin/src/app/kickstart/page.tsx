@@ -21,6 +21,7 @@ export default function EventDashboard() {
     pending: 0,
     waitlisted: 0,
     checkedIn: 0,
+    byIsland: {},
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
