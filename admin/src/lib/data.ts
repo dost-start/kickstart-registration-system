@@ -250,6 +250,7 @@ export async function fetchRegistrantStats(): Promise<RegistrantStats> {
       pending: pendingResult.count ?? 0,
       waitlisted: waitlistedResult.count ?? 0,
       checkedIn: checkedInResult.count ?? 0,
+      byIsland: {},
     };
   } catch (error) {
     // If it's already our custom error, re-throw it
