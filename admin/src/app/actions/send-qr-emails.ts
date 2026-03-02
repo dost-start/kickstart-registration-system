@@ -273,9 +273,11 @@ function getDefaultEmailBody(
       <ol style="color: #92400e; padding-left: 20px; margin: 0;">
         <li><strong>STRICTLY NO PARKING</strong> (drop-and-go only).</li>
         <li><strong>STRICTLY NO THROWING OF TRASH ANYWHERE</strong></li>
+        <li>Location: AVR-GET BLDG, University of Mindanao-Matina</li> 
         <li>You may use the <strong>Matina Gate</strong> or <strong>Maa Gate</strong> for entry.</li>
         <li>Please be mindful of the university dress code. Refer here: <a href="https://online.fliphtml5.com/zyzbr/obgp/" style="color: #92400e;">https://online.fliphtml5.com/zyzbr/obgp/</a></li>
         <li>Please present a valid ID or school ID to the guard upon entry for verification. Use the same university/organization ID you registered with. <strong>No ID, no entry.</strong></li>
+        <li>Register on Luma now for a <strong>chance to win exclusive Avalanche merch! </strong> Winners will be announced on-site at the event. 🔗 Sign up here: <a href="https://luma.com/o7hrsicu" style="color: #92400e;">https://luma.com/o7hrsicu</a></li>
       </ol>
     </div>
     `
