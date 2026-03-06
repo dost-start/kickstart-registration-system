@@ -205,9 +205,11 @@ function getDefaultEmailBody(
   const fullName = `${participant.first_name} ${participant.middle_name ? participant.middle_name + " " : ""}${participant.last_name}${participant.suffix ? " " + participant.suffix : ""}`;
   const island = participant.island || "Luzon";
   const eventDate =
-    island === "Luzon" || island === "Visayas"
+    island === "Luzon"
       ? "February 28, 2026"
-      : "March 14, 2026";
+      : island === "Visayas"
+        ? "March 7, 2026"
+        : "March 14, 2026";
 
   return `
 <!DOCTYPE html>

@@ -130,7 +130,7 @@ export function EventDescription() {
               About KickSTART 2026
             </h2>
           </div>
-          
+
           <p className="text-gray-700 leading-relaxed mb-6 text-lg">
             KickSTART is the official General Assembly of START-DOST, uniting scholars and officers
             from across the Philippines in a nationwide convergence of innovation, collaboration,
@@ -138,7 +138,7 @@ export function EventDescription() {
             face-to-face assemblies in Batangas (Luzon), Cebu (Visayas), and Davao (Mindanao) to
             ensure inclusivity for scholars from all islands.
           </p>
-          
+
           <div className="grid md:grid-cols-4 gap-6">
             <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
               <div className="w-10 h-10 bg-[#0f9dfe]/10 rounded-lg flex items-center justify-center border border-[#0f9dfe]/30">

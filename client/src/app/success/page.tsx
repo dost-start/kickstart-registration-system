@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 // Event dates per island (matches EventDetails)
 const ISLAND_EVENT_DATES: Record<string, string> = {
   Luzon: "February 28, 2026",
-  Visayas: "February 28, 2026",
+  Visayas: "March 7, 2026",
   Mindanao: "March 14, 2026",
 };
 
