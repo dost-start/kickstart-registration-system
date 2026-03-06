@@ -12,6 +12,8 @@ import {
   UserCheck,
   UserX,
   XCircle,
+  Send,
+  Loader2,
 } from "lucide-react";
 import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
@@ -26,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { RegistrantDetailsDialog } from "./RegistrantDetailsDialog";
+import { sendQREmails } from "@/app/actions/send-qr-emails";
 
 interface Props {
   isUpdating: number | null;
@@ -52,8 +55,28 @@ function ActionCell({
   onDataChange: () => void;
 }) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   const isAccepted = registrant.status === "accepted";
+
+  const handleSendQREmail = async () => {
+    setIsSendingEmail(true);
+    try {
+      const result = await sendQREmails([registrant.id]);
+      if (result.success) {
+        alert(`Successfully sent QR email to ${registrant.email}`);
+      } else {
+        alert(
+          `Failed to send email to ${registrant.email}: ${result.errors[0]?.error || "Unknown error"
+          }`
+        );
+      }
+    } catch (error) {
+      alert(`Failed to send email: ${error instanceof Error ? error.message : "Unknown error"}`);
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -140,6 +163,21 @@ function ActionCell({
             <Copy className="h-4 w-4" />
             <span>Copy email</span>
           </DropdownMenuItem>
+
+          {isAccepted && (
+            <DropdownMenuItem
+              onClick={handleSendQREmail}
+              disabled={isSendingEmail}
+              className="flex items-center gap-2 text-[#0f9dfe] hover:bg-[#0f9dfe]/10 focus:bg-[#0f9dfe]/10 focus:text-[#0f9dfe]"
+            >
+              {isSendingEmail ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+              <span>{isSendingEmail ? "Sending..." : "Send QR Email"}</span>
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuSeparator />
 
@@ -528,12 +566,12 @@ export default function RegistrantTableColumns({
       },
       cell: ({ row }) => {
         const preferredDate = row.getValue("preferred_date") as string;
-        const badgeColor = preferredDate === "December 13" 
+        const badgeColor = preferredDate === "December 13"
           ? "bg-blue-100 text-blue-700 border border-blue-300"
           : preferredDate === "December 14"
-          ? "bg-purple-100 text-purple-700 border border-purple-300" 
-          : "bg-gray-100 text-gray-700 border border-gray-300";
-        
+            ? "bg-purple-100 text-purple-700 border border-purple-300"
+            : "bg-gray-100 text-gray-700 border border-gray-300";
+
         return (
           <div className="flex items-center space-x-2">
             <Badge className={badgeColor}>
@@ -635,13 +673,13 @@ export default function RegistrantTableColumns({
       filterFn: (row, _columnId, filterValue) => {
         const hasAttendedGa = row.original.has_attended_ga;
         const searchTerm = filterValue.toLowerCase().trim();
-        
+
         if (searchTerm === "yes" || searchTerm === "y" || searchTerm === "true") {
           return hasAttendedGa === true;
         } else if (searchTerm === "no" || searchTerm === "n" || searchTerm === "false") {
           return hasAttendedGa === false;
         }
-        
+
         return true;
       },
       cell: ({ row }) => {
@@ -672,13 +710,13 @@ export default function RegistrantTableColumns({
       filterFn: (row, _columnId, filterValue) => {
         const isStartMember = row.original.is_start_member;
         const searchTerm = filterValue.toLowerCase().trim();
-        
+
         if (searchTerm === "yes" || searchTerm === "y" || searchTerm === "true") {
           return isStartMember === true;
         } else if (searchTerm === "no" || searchTerm === "n" || searchTerm === "false") {
           return isStartMember === false;
         }
-        
+
         return true;
       },
       cell: ({ row }) => {
@@ -709,7 +747,7 @@ export default function RegistrantTableColumns({
       filterFn: (row, _columnId, filterValue) => {
         const status = row.original.status;
         const searchTerm = filterValue.toLowerCase().trim();
-        
+
         return status.toLowerCase().includes(searchTerm);
       },
       cell: ({ row }) => {
@@ -718,15 +756,15 @@ export default function RegistrantTableColumns({
         return (
           <div className="flex items-center space-x-2">
             <Badge className={
-              status === "accepted" 
+              status === "accepted"
                 ? "bg-green-100 text-green-700 border border-green-300"
                 : status === "pending"
-                ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
-                : status === "waitlisted"
-                ? "bg-purple-100 text-purple-700 border border-purple-300"
-                : status === "rejected"
-                ? "bg-red-100 text-red-700 border border-red-300"
-                : "bg-gray-100 text-gray-700 border border-gray-300"
+                  ? "bg-yellow-100 text-yellow-700 border border-yellow-300"
+                  : status === "waitlisted"
+                    ? "bg-purple-100 text-purple-700 border border-purple-300"
+                    : status === "rejected"
+                      ? "bg-red-100 text-red-700 border border-red-300"
+                      : "bg-gray-100 text-gray-700 border border-gray-300"
             }>
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </Badge>
@@ -751,16 +789,16 @@ export default function RegistrantTableColumns({
       filterFn: (row, _columnId, filterValue) => {
         const isCheckedIn = row.original.is_checked_in;
         const searchTerm = filterValue.toLowerCase().trim();
-        
-        if (searchTerm === "yes" || searchTerm === "y" || searchTerm === "true" || 
-            searchTerm === "checked in" || searchTerm === "checked" || searchTerm === "in") {
+
+        if (searchTerm === "yes" || searchTerm === "y" || searchTerm === "true" ||
+          searchTerm === "checked in" || searchTerm === "checked" || searchTerm === "in") {
           return isCheckedIn === true;
-        } 
-        else if (searchTerm === "no" || searchTerm === "n" || searchTerm === "false" || 
-                 searchTerm === "not checked in" || searchTerm === "not checked" || searchTerm === "out") {
+        }
+        else if (searchTerm === "no" || searchTerm === "n" || searchTerm === "false" ||
+          searchTerm === "not checked in" || searchTerm === "not checked" || searchTerm === "out") {
           return isCheckedIn === false;
         }
-        
+
         return true;
       },
       cell: ({ row }) => {
