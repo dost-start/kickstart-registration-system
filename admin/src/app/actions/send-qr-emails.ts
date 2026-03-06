@@ -57,6 +57,9 @@ export async function sendQREmails(
     errors: [],
   };
 
+  // Helper for adding delay between sends
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
   // Process each participant
   for (const participant of participants) {
     if (!participant.email) {
@@ -100,9 +103,9 @@ export async function sendQREmails(
       // Attach Luzon-specific venue map image when applicable
       let venueMap:
         | {
-            buffer: Buffer;
-            filename: string;
-          }
+          buffer: Buffer;
+          filename: string;
+        }
         | undefined;
 
       if (participant.island === "Luzon") {
@@ -119,6 +122,21 @@ export async function sendQREmails(
           };
         } catch (error) {
           console.error("Failed to load Luzon venue map image:", error);
+        }
+      } else if (participant.island === "Visayas") {
+        try {
+          const venueMapPath = path.join(
+            process.cwd(),
+            "public",
+            "visayas-venue-map.jpg"
+          );
+          const buffer = await fs.readFile(venueMapPath);
+          venueMap = {
+            buffer,
+            filename: "KickSTART-2026-Visayas-Venue-Map.jpg",
+          };
+        } catch (error) {
+          console.error("Failed to load Visayas venue map image:", error);
         }
       }
 
@@ -151,6 +169,12 @@ export async function sendQREmails(
         email: participant.email,
         error: error instanceof Error ? error.message : "Unknown error",
       });
+    }
+
+    // Add a 500ms delay between emails to prevent rate limiting
+    // We can skip the delay on the very last participant
+    if (participant !== participants[participants.length - 1]) {
+      await delay(500);
     }
   }
 
@@ -224,13 +248,12 @@ function getDefaultEmailBody(
         
         <tr>
           <td style="padding: 8px 0; color: #666;"><strong>Location:</strong></td>
-          <td style="padding: 8px 0; color: #333;">${
-            island === "Luzon"
-              ? "Batangas State University, The National Engineering University (Alangilan Campus) – Leonardo Da Vinci Amphitheater (3rd floor of Albert Einstein Building)"
-              : island === "Visayas"
-                ? "University of Southern Philippines Foundation"
-                : "University of Mindanao - Main Campus"
-          }</td>
+          <td style="padding: 8px 0; color: #333;">${island === "Luzon"
+      ? "Batangas State University, The National Engineering University (Alangilan Campus) – Leonardo Da Vinci Amphitheater (3rd floor of Albert Einstein Building)"
+      : island === "Visayas"
+        ? "University of Southern Philippines Foundation - Lahug Campus"
+        : "University of Mindanao - Main Campus"
+    }</td>
         </tr>
       </table>
     </div>
@@ -251,9 +274,8 @@ function getDefaultEmailBody(
       </ul>
     </div>
 
-    ${
-      island === "Luzon"
-        ? `
+    ${island === "Luzon"
+      ? `
     <div style="background: #fef3c7; border: 1px solid #fbbf24; padding: 20px; margin: 25px 0; border-radius: 5px;">
       <h3 style="color: #92400e; margin-top: 0;">🔔 Luzon-Specific Reminders</h3>
       <ol style="color: #92400e; padding-left: 20px; margin: 0;">
@@ -264,6 +286,24 @@ function getDefaultEmailBody(
         <li>Additionally, <strong>no plastic bottles will be allowed upon entry</strong>.</li>
         <li>The detailed <strong>venue map is attached</strong> to this email for your reference.</li>
       </ol>
+    </div>
+    `
+      : island === "Visayas"
+        ? `
+    <div style="background: #fef3c7; border: 1px solid #fbbf24; padding: 20px; margin: 25px 0; border-radius: 5px;">
+      <h3 style="color: #92400e; margin-top: 0;">‼️ KICKSTART VISAYAS – IMPORTANT REMINDERS</h3>
+      <ul style="color: #92400e; padding-left: 20px; margin: 0;">
+        <li><strong>Arrival Time:</strong> Please arrive at the venue by 12:00 NN for registration.</li>
+        <li><strong>Venue:</strong> Agustin Jereza Hall, Main Function Room (4th Floor), USPF Lahug. Please refer to the attached map.</li>
+        <li><strong>Bring the following:</strong>
+          <ul>
+            <li>Gadget (laptop/iPad/tablet)</li>
+            <li>Notebook and pen/pencil</li>
+            <li>Any valid ID</li>
+          </ul>
+        </li>
+        <li><strong>Dress Code:</strong> Proper attire is required. Shorts, slippers, and sleeveless tops are not allowed.</li>
+      </ul>
     </div>
     `
         : island === "Mindanao"

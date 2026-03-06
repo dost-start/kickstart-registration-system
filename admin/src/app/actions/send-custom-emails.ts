@@ -45,6 +45,9 @@ export async function sendCustomEmails(
   const resend = new Resend(process.env.RESEND_API_KEY);
   const fromEmail = process.env.EMAIL_FROM || "KickSTART 2026 <noreply@simera.cloud>";
 
+  // Helper for adding delay between sends
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
   for (const participant of participants) {
     if (!participant.email) {
       results.failed++;
@@ -96,6 +99,11 @@ export async function sendCustomEmails(
         error: error instanceof Error ? error.message : "Unknown error",
       });
       console.error(`❌ Failed to send to ${participant.email}:`, error);
+    }
+
+    // Add a 500ms delay between emails to prevent rate limiting
+    if (participant !== participants[participants.length - 1]) {
+      await delay(500);
     }
   }
 

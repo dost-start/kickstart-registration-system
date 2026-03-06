@@ -1,6 +1,10 @@
 import nodemailer from "nodemailer";
 import { Resend } from "resend";
 
+// Cache instances to reuse connections and avoid login rate limits
+let cachedTransporter: nodemailer.Transporter | null = null;
+let cachedResend: Resend | null = null;
+
 export interface SendEmailOptions {
   to: string;
   subject: string;
@@ -72,15 +76,22 @@ export async function sendEmailWithQRCode(
   // Use SMTP (Gmail) if configured
   if (smtpHost && smtpUser && smtpPass) {
     try {
-      const transporter = nodemailer.createTransport({
-        host: smtpHost,
-        port: parseInt(process.env.SMTP_PORT || "587"),
-        secure: process.env.SMTP_PORT === "465",
-        auth: {
-          user: smtpUser,
-          pass: smtpPass,
-        },
-      });
+      if (!cachedTransporter) {
+        cachedTransporter = nodemailer.createTransport({
+          host: smtpHost,
+          port: parseInt(process.env.SMTP_PORT || "587"),
+          secure: process.env.SMTP_PORT === "465",
+          pool: true, // Use connection pooling
+          maxConnections: 3, // Max simultaneous connections
+          maxMessages: 100, // Max messages per connection before recycling
+          auth: {
+            user: smtpUser,
+            pass: smtpPass,
+          },
+        });
+      }
+
+      const transporter = cachedTransporter;
 
       const attachments: { filename: string; content: Buffer }[] = [
         { filename: qrCodeFilename, content: qrCodeBuffer },
@@ -122,7 +133,11 @@ export async function sendEmailWithQRCode(
   // Fall back to Resend
   if (resendApiKey) {
     try {
-      const resend = new Resend(resendApiKey);
+      if (!cachedResend) {
+        cachedResend = new Resend(resendApiKey);
+      }
+
+      const resend = cachedResend;
 
       const attachments: { filename: string; content: Buffer }[] = [
         { filename: qrCodeFilename, content: qrCodeBuffer },
