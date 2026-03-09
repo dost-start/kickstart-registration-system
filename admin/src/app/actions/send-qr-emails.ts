@@ -29,168 +29,183 @@ export async function sendQREmails(
   emailSubject?: string,
   emailBody?: string
 ): Promise<EmailSendResult> {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  // Fetch participants (don't filter by status here - the UI already filtered)
-  const { data: participants, error: fetchError } = await supabase
-    .from("kickstart_form_entries")
-    .select("*")
-    .in("id", participantIds);
+    // Fetch participants (don't filter by status here - the UI already filtered)
+    const { data: participants, error: fetchError } = await supabase
+      .from("kickstart_form_entries")
+      .select("*")
+      .in("id", participantIds);
 
-  if (fetchError) {
-    throw new Error(`Failed to fetch participants: ${fetchError.message}`);
-  }
+    if (fetchError) {
+      return {
+        success: false,
+        sent: 0,
+        failed: participantIds.length,
+        errors: [{ email: "System", error: `Failed to fetch participants: ${fetchError.message}` }],
+      };
+    }
 
-  if (!participants || participants.length === 0) {
+    if (!participants || participants.length === 0) {
+      return {
+        success: false,
+        sent: 0,
+        failed: 0,
+        errors: [{ email: "N/A", error: "No accepted participants found" }],
+      };
+    }
+
+    const results: EmailSendResult = {
+      success: false, // Will be set to true if at least one email is sent
+      sent: 0,
+      failed: 0,
+      errors: [],
+    };
+
+    // Helper for adding delay between sends
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    // Process each participant
+    for (const participant of participants) {
+      if (!participant.email) {
+        results.failed++;
+        results.errors.push({
+          email: participant.email || "No email",
+          error: "Participant has no email address",
+        });
+        continue;
+      }
+
+      if (!participant.event_uid) {
+        results.failed++;
+        results.errors.push({
+          email: participant.email,
+          error: "Participant has no event UID",
+        });
+        continue;
+      }
+
+      try {
+        // Generate QR code
+        const qrCodeBuffer = await generateQRCodeBuffer(participant.event_uid);
+
+        // Generate Apple Wallet pass if configured
+        let walletPass: { buffer: Buffer; filename: string } | undefined;
+        if (isWalletPassConfigured()) {
+          const passBuffer = await generateAppleWalletPass(participant);
+          if (passBuffer) {
+            walletPass = {
+              buffer: passBuffer,
+              filename: `KickSTART-2026-${participant.event_uid}.pkpass`,
+            };
+            console.log(`🍎 Wallet pass generated for ${participant.email}`);
+          }
+        }
+
+        // Send email directly (no API route needed)
+        console.log(`📧 Sending email to ${participant.email}`);
+
+        // Attach Luzon-specific venue map image when applicable
+        let venueMap:
+          | {
+            buffer: Buffer;
+            filename: string;
+          }
+          | undefined;
+
+        if (participant.island === "Luzon") {
+          try {
+            const venueMapPath = path.join(
+              process.cwd(),
+              "public",
+              "venue-map.JPEG"
+            );
+            const buffer = await fs.readFile(venueMapPath);
+            venueMap = {
+              buffer,
+              filename: "KickSTART-2026-Luzon-Venue-Map.jpeg",
+            };
+          } catch (error) {
+            console.error("Failed to load Luzon venue map image:", error);
+          }
+        } else if (participant.island === "Visayas") {
+          try {
+            const venueMapPath = path.join(
+              process.cwd(),
+              "public",
+              "visayas-venue-map.jpg"
+            );
+            const buffer = await fs.readFile(venueMapPath);
+            venueMap = {
+              buffer,
+              filename: "KickSTART-2026-Visayas-Venue-Map.jpg",
+            };
+          } catch (error) {
+            console.error("Failed to load Visayas venue map image:", error);
+          }
+        }
+
+        const emailResult = await sendEmailWithQRCode({
+          to: participant.email,
+          subject: emailSubject || getDefaultSubject(participant),
+          html: emailBody || getDefaultEmailBody(participant, !!walletPass),
+          qrCode: qrCodeBuffer.toString("base64"),
+          qrCodeFilename: `qr-code-${participant.event_uid}.png`,
+          walletPass,
+          venueMap,
+        });
+
+        if (emailResult.success) {
+          console.log(`✅ Email sent to ${participant.email}:`, {
+            messageId: emailResult.messageId || "N/A",
+            emailId: emailResult.emailId || "N/A",
+            method: emailResult.method || "SMTP",
+          });
+          results.sent++;
+          results.success = true; // At least one email was sent successfully
+        } else {
+          const errorMsg = emailResult.error || "Email sending failed";
+          console.error(`❌ Email not sent to ${participant.email}:`, errorMsg);
+          throw new Error(errorMsg);
+        }
+      } catch (error) {
+        results.failed++;
+        results.errors.push({
+          email: participant.email,
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
+      }
+
+      // Add a 500ms delay between emails to prevent rate limiting
+      // We can skip the delay on the very last participant
+      if (participant !== participants[participants.length - 1]) {
+        await delay(500);
+      }
+    }
+
+    // Final success status: true if at least one email was sent
+    if (results.sent > 0) {
+      results.success = true;
+    }
+
+    console.log("📊 Final email send results:", {
+      total: participants.length,
+      sent: results.sent,
+      failed: results.failed,
+      success: results.success,
+    });
+
+    return results;
+  } catch (error) {
+    console.error("Unhandled error in sendQREmails:", error);
     return {
       success: false,
       sent: 0,
-      failed: 0,
-      errors: [{ email: "N/A", error: "No accepted participants found" }],
+      failed: participantIds.length,
+      errors: [{ email: "System", error: error instanceof Error ? error.message : "An unexpected error occurred" }],
     };
   }
-
-  const results: EmailSendResult = {
-    success: false, // Will be set to true if at least one email is sent
-    sent: 0,
-    failed: 0,
-    errors: [],
-  };
-
-  // Helper for adding delay between sends
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-  // Process each participant
-  for (const participant of participants) {
-    if (!participant.email) {
-      results.failed++;
-      results.errors.push({
-        email: participant.email || "No email",
-        error: "Participant has no email address",
-      });
-      continue;
-    }
-
-    if (!participant.event_uid) {
-      results.failed++;
-      results.errors.push({
-        email: participant.email,
-        error: "Participant has no event UID",
-      });
-      continue;
-    }
-
-    try {
-      // Generate QR code
-      const qrCodeBuffer = await generateQRCodeBuffer(participant.event_uid);
-
-      // Generate Apple Wallet pass if configured
-      let walletPass: { buffer: Buffer; filename: string } | undefined;
-      if (isWalletPassConfigured()) {
-        const passBuffer = await generateAppleWalletPass(participant);
-        if (passBuffer) {
-          walletPass = {
-            buffer: passBuffer,
-            filename: `KickSTART-2026-${participant.event_uid}.pkpass`,
-          };
-          console.log(`🍎 Wallet pass generated for ${participant.email}`);
-        }
-      }
-
-      // Send email directly (no API route needed)
-      console.log(`📧 Sending email to ${participant.email}`);
-
-      // Attach Luzon-specific venue map image when applicable
-      let venueMap:
-        | {
-          buffer: Buffer;
-          filename: string;
-        }
-        | undefined;
-
-      if (participant.island === "Luzon") {
-        try {
-          const venueMapPath = path.join(
-            process.cwd(),
-            "public",
-            "venue-map.JPEG"
-          );
-          const buffer = await fs.readFile(venueMapPath);
-          venueMap = {
-            buffer,
-            filename: "KickSTART-2026-Luzon-Venue-Map.jpeg",
-          };
-        } catch (error) {
-          console.error("Failed to load Luzon venue map image:", error);
-        }
-      } else if (participant.island === "Visayas") {
-        try {
-          const venueMapPath = path.join(
-            process.cwd(),
-            "public",
-            "visayas-venue-map.jpg"
-          );
-          const buffer = await fs.readFile(venueMapPath);
-          venueMap = {
-            buffer,
-            filename: "KickSTART-2026-Visayas-Venue-Map.jpg",
-          };
-        } catch (error) {
-          console.error("Failed to load Visayas venue map image:", error);
-        }
-      }
-
-      const emailResult = await sendEmailWithQRCode({
-        to: participant.email,
-        subject: emailSubject || getDefaultSubject(participant),
-        html: emailBody || getDefaultEmailBody(participant, !!walletPass),
-        qrCode: qrCodeBuffer.toString("base64"),
-        qrCodeFilename: `qr-code-${participant.event_uid}.png`,
-        walletPass,
-        venueMap,
-      });
-
-      if (emailResult.success) {
-        console.log(`✅ Email sent to ${participant.email}:`, {
-          messageId: emailResult.messageId || "N/A",
-          emailId: emailResult.emailId || "N/A",
-          method: emailResult.method || "SMTP",
-        });
-        results.sent++;
-        results.success = true; // At least one email was sent successfully
-      } else {
-        const errorMsg = emailResult.error || "Email sending failed";
-        console.error(`❌ Email not sent to ${participant.email}:`, errorMsg);
-        throw new Error(errorMsg);
-      }
-    } catch (error) {
-      results.failed++;
-      results.errors.push({
-        email: participant.email,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
-
-    // Add a 500ms delay between emails to prevent rate limiting
-    // We can skip the delay on the very last participant
-    if (participant !== participants[participants.length - 1]) {
-      await delay(500);
-    }
-  }
-
-  // Final success status: true if at least one email was sent
-  if (results.sent > 0) {
-    results.success = true;
-  }
-
-  console.log("📊 Final email send results:", {
-    total: participants.length,
-    sent: results.sent,
-    failed: results.failed,
-    success: results.success,
-  });
-
-  return results;
 }
 
 function getDefaultSubject(participant: FormEntry): string {

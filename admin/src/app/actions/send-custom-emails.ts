@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { Resend } from "resend";
+import { sendBasicEmail } from "@/lib/email";
 
 export type CustomEmailResult = {
   success: boolean;
@@ -15,107 +15,122 @@ export async function sendCustomEmails(
   subject: string,
   htmlBody: string
 ): Promise<CustomEmailResult> {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  const { data: participants, error: fetchError } = await supabase
-    .from("kickstart_form_entries")
-    .select("*")
-    .in("id", participantIds);
+    const { data: participants, error: fetchError } = await supabase
+      .from("kickstart_form_entries")
+      .select("*")
+      .in("id", participantIds);
 
-  if (fetchError) {
-    throw new Error(`Failed to fetch participants: ${fetchError.message}`);
-  }
+    if (fetchError) {
+      return {
+        success: false,
+        sent: 0,
+        failed: participantIds.length,
+        errors: [{ email: "System", error: `Failed to fetch participants: ${fetchError.message}` }],
+      };
+    }
 
-  if (!participants || participants.length === 0) {
-    return {
+    if (!participants || participants.length === 0) {
+      return {
+        success: false,
+        sent: 0,
+        failed: 0,
+        errors: [{ email: "N/A", error: "No participants found" }],
+      };
+    }
+
+    const results: CustomEmailResult = {
       success: false,
       sent: 0,
       failed: 0,
-      errors: [{ email: "N/A", error: "No participants found" }],
+      errors: [],
+    };
+
+    // Helper for adding delay between sends
+    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+    for (const participant of participants) {
+      if (!participant.email) {
+        results.failed++;
+        results.errors.push({
+          email: "No email",
+          error: "Participant has no email address",
+        });
+        continue;
+      }
+
+      try {
+        const fullName = `${participant.first_name} ${participant.middle_name ? participant.middle_name + " " : ""}${participant.last_name}${participant.suffix ? " " + participant.suffix : ""}`;
+
+        // Replace placeholders in subject and body
+        const personalizedSubject = subject
+          .replace(/{{name}}/g, fullName)
+          .replace(/{{first_name}}/g, participant.first_name || "")
+          .replace(/{{last_name}}/g, participant.last_name || "")
+          .replace(/{{email}}/g, participant.email || "")
+          .replace(/{{event_uid}}/g, participant.event_uid || "")
+          .replace(/{{island}}/g, participant.island || "")
+          .replace(/{{status}}/g, participant.status || "")
+          .replace(/{{university}}/g, participant.university || "");
+
+        const personalizedBody = htmlBody
+          .replace(/{{name}}/g, fullName)
+          .replace(/{{first_name}}/g, participant.first_name || "")
+          .replace(/{{last_name}}/g, participant.last_name || "")
+          .replace(/{{email}}/g, participant.email || "")
+          .replace(/{{event_uid}}/g, participant.event_uid || "")
+          .replace(/{{island}}/g, participant.island || "")
+          .replace(/{{status}}/g, participant.status || "")
+          .replace(/{{university}}/g, participant.university || "");
+
+        const emailResult = await sendBasicEmail({
+          to: participant.email,
+          subject: personalizedSubject,
+          html: wrapInEmailTemplate(personalizedBody),
+        });
+
+        if (emailResult.success) {
+          results.sent++;
+          results.success = true;
+          console.log(`✅ Custom email sent to ${participant.email} via ${emailResult.method}`);
+        } else {
+          throw new Error(emailResult.error || "Email sending failed");
+        }
+      } catch (error) {
+        results.failed++;
+        results.errors.push({
+          email: participant.email,
+          error: error instanceof Error ? error.message : "Unknown error",
+        });
+        console.error(`❌ Failed to send to ${participant.email}:`, error);
+      }
+
+      // Add a 500ms delay between emails to prevent rate limiting
+      if (participant !== participants[participants.length - 1]) {
+        await delay(500);
+      }
+    }
+
+    if (results.sent > 0) results.success = true;
+
+    console.log("📊 Custom email blast results:", {
+      total: participants.length,
+      sent: results.sent,
+      failed: results.failed,
+    });
+
+    return results;
+  } catch (error) {
+    console.error("Unhandled error in sendCustomEmails:", error);
+    return {
+      success: false,
+      sent: 0,
+      failed: participantIds.length,
+      errors: [{ email: "System", error: error instanceof Error ? error.message : "An unexpected error occurred" }],
     };
   }
-
-  const results: CustomEmailResult = {
-    success: false,
-    sent: 0,
-    failed: 0,
-    errors: [],
-  };
-
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const fromEmail = process.env.EMAIL_FROM || "KickSTART 2026 <noreply@simera.cloud>";
-
-  // Helper for adding delay between sends
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-  for (const participant of participants) {
-    if (!participant.email) {
-      results.failed++;
-      results.errors.push({
-        email: "No email",
-        error: "Participant has no email address",
-      });
-      continue;
-    }
-
-    try {
-      const fullName = `${participant.first_name} ${participant.middle_name ? participant.middle_name + " " : ""}${participant.last_name}${participant.suffix ? " " + participant.suffix : ""}`;
-
-      // Replace placeholders in subject and body
-      const personalizedSubject = subject
-        .replace(/{{name}}/g, fullName)
-        .replace(/{{first_name}}/g, participant.first_name || "")
-        .replace(/{{last_name}}/g, participant.last_name || "")
-        .replace(/{{email}}/g, participant.email || "")
-        .replace(/{{event_uid}}/g, participant.event_uid || "")
-        .replace(/{{island}}/g, participant.island || "")
-        .replace(/{{status}}/g, participant.status || "")
-        .replace(/{{university}}/g, participant.university || "");
-
-      const personalizedBody = htmlBody
-        .replace(/{{name}}/g, fullName)
-        .replace(/{{first_name}}/g, participant.first_name || "")
-        .replace(/{{last_name}}/g, participant.last_name || "")
-        .replace(/{{email}}/g, participant.email || "")
-        .replace(/{{event_uid}}/g, participant.event_uid || "")
-        .replace(/{{island}}/g, participant.island || "")
-        .replace(/{{status}}/g, participant.status || "")
-        .replace(/{{university}}/g, participant.university || "");
-
-      await resend.emails.send({
-        from: fromEmail,
-        to: participant.email,
-        subject: personalizedSubject,
-        html: wrapInEmailTemplate(personalizedBody),
-      });
-
-      results.sent++;
-      results.success = true;
-      console.log(`✅ Custom email sent to ${participant.email}`);
-    } catch (error) {
-      results.failed++;
-      results.errors.push({
-        email: participant.email,
-        error: error instanceof Error ? error.message : "Unknown error",
-      });
-      console.error(`❌ Failed to send to ${participant.email}:`, error);
-    }
-
-    // Add a 500ms delay between emails to prevent rate limiting
-    if (participant !== participants[participants.length - 1]) {
-      await delay(500);
-    }
-  }
-
-  if (results.sent > 0) results.success = true;
-
-  console.log("📊 Custom email blast results:", {
-    total: participants.length,
-    sent: results.sent,
-    failed: results.failed,
-  });
-
-  return results;
 }
 
 function wrapInEmailTemplate(body: string): string {
